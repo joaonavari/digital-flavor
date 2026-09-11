@@ -1,0 +1,3 @@
+-- Digital Flavor
+-- Script inicial do banco de dados PostgreSQL.
+-- As tabelas e relacionamentos serão definidos após a conclusão do DER.
