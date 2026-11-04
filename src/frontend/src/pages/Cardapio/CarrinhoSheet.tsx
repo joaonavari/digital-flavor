@@ -9,7 +9,8 @@ import { Sheet } from "../../components/Sheet";
 import { Stepper } from "../../components/Stepper";
 import { TextField } from "../../components/TextField";
 import { useCarrinho } from "../../contexts/useCarrinho";
-import { digitosCartao, mascararCartao, validarCartao } from "../../lib/cartao";
+import { detectarBandeira, digitosCartao, mascararCartao, validarCartao } from "../../lib/cartao";
+import type { DadosPagamento } from "../../types";
 import { formatarPreco } from "../../lib/formatar";
 import { notificar } from "../../lib/notificar";
 import type { MetodoPagamento } from "../../types";
@@ -31,6 +32,13 @@ export function CarrinhoSheet({ aberto, aoFechar, aoEstoqueMudar }: Props) {
   const [enviando, setEnviando] = useState(false);
 
   const erroCartao = metodo === "CARTAO" && cartaoTocado ? validarCartao(cartao) : null;
+
+  // Fechou a folha: o número digitado é descartado da memória.
+  function fechar() {
+    setCartao("");
+    setCartaoTocado(false);
+    aoFechar();
+  }
   const vazio = itens.length === 0;
 
   async function confirmar() {
@@ -41,14 +49,18 @@ export function CarrinhoSheet({ aberto, aoFechar, aoEstoqueMudar }: Props) {
     }
     setEnviando(true);
     try {
+      // O número do cartão só existe aqui na memória e no corpo deste POST; nunca é salvo.
+      const bandeira = detectarBandeira(cartao);
+      const pagamento: DadosPagamento =
+        metodo === "PIX"
+          ? { metodo: "PIX" }
+          : { metodo: "CARTAO", numeroCartao: digitosCartao(cartao), parcelas: 1, ...(bandeira ? { bandeira } : {}) };
       const pedido = await confirmarPedido({
         itens: itens.map((i) => ({ produtoId: i.produto.id, quantidade: i.quantidade })),
-        pagamento: metodo === "PIX" ? { metodo: "PIX" } : { metodo: "CARTAO", numeroCartao: digitosCartao(cartao) },
+        pagamento,
       });
       limpar();
-      setCartao("");
-      setCartaoTocado(false);
-      aoFechar();
+      fechar();
       notificar.sucesso("Pedido confirmado", `Pedido #${pedido.id} · ${formatarPreco(pedido.total)}`);
       navegar(`/pedidos/${pedido.id}`);
     } catch (erro) {
@@ -69,7 +81,7 @@ export function CarrinhoSheet({ aberto, aoFechar, aoEstoqueMudar }: Props) {
   return (
     <Sheet
       aberto={aberto}
-      aoFechar={aoFechar}
+      aoFechar={fechar}
       titulo="Seu pedido"
       rodape={
         vazio ? undefined : (
@@ -89,7 +101,7 @@ export function CarrinhoSheet({ aberto, aoFechar, aoEstoqueMudar }: Props) {
         <EmptyState
           titulo="Seu carrinho está vazio"
           descricao="Toque no + de um produto para adicioná-lo."
-          acao={{ rotulo: "Ver cardápio", aoClicar: aoFechar }}
+          acao={{ rotulo: "Ver cardápio", aoClicar: fechar }}
         />
       ) : (
         <>
