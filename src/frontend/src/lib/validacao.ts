@@ -1,16 +1,16 @@
 /*
  * Validações dos formulários. Cada função devolve a mensagem de erro ou null.
- * Os limites ainda não existem no banco (schema.sql vazio): alinhar com o back.
+ * Os limites seguem o schema do banco (MySQL) definido pelo back-end.
  */
 
 export const LIMITES = {
-  nome: 100,
-  email: 120,
+  nome: 120,
+  email: 160,
   senhaMin: 6,
   senhaMax: 72,
   matricula: 20,
-  turma: 20,
-  telefone: 15, // "(00) 00000-0000"
+  turma: 30,
+  telefone: 20,
 } as const;
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;

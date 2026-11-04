@@ -20,6 +20,19 @@
   border-radius: 14px;
 }
 
+/* Cantos de cada campo acompanham o grupo, para o anel de foco seguir a curva. */
+.grupo > .campo:first-child {
+  border-radius: var(--radius-group) var(--radius-group) 0 0;
+}
+
+.grupo > .campo:last-child {
+  border-radius: 0 0 var(--radius-group) var(--radius-group);
+}
+
+.grupo > .campo:only-child {
+  border-radius: var(--radius-group);
+}
+
 .grupo > .campo + .campo::before {
   content: "";
   position: absolute;
@@ -28,6 +41,12 @@
   right: 0;
   height: 0.5px;
   background: var(--separator);
+}
+
+/* A divisória some junto do campo focado para não riscar o anel. */
+.grupo > .campo:focus-within::before,
+.grupo > .campo:focus-within + .campo::before {
+  opacity: 0;
 }
 
 .campo:focus-within {
@@ -69,13 +88,12 @@
   outline: none;
 }
 
-/* O anel de foco fica no campo inteiro (a entrada não tem borda própria). */
+/*
+ * O anel de foco fica no campo inteiro e é desenhado por dentro (inset),
+ * então o overflow: hidden do grupo não corta os cantos.
+ */
 .campo:has(.entrada:focus-visible) {
-  box-shadow: inset 0 0 0 2px var(--focus-ring);
-}
-
-.sozinho:has(.entrada:focus-visible) {
-  border-radius: 14px;
+  box-shadow: inset 0 0 0 2px var(--accent);
 }
 
 textarea.entrada {

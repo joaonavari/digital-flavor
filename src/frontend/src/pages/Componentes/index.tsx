@@ -133,6 +133,9 @@ export function Componentes() {
             erro={d.erroCampo}
           />
         </GrupoCampos>
+        <GrupoCampos>
+          <TextField agrupado rotulo="Grupo com um campo só" placeholder="Os quatro cantos arredondados" />
+        </GrupoCampos>
         <TextField rotulo="Preço" prefixo="R$" inputMode="decimal" placeholder="0,00" dica="Use vírgula para os centavos." />
         <TextField rotulo="Descrição" multilinha placeholder="Opcional" />
       </section>
