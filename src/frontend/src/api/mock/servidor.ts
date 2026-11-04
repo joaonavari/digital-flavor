@@ -223,6 +223,12 @@ const rotas: Array<[Metodo, RegExp, Manipulador]> = [
   ["DELETE", /^\/api\/produtos\/(\d+)$/, ({ token, params }) => {
     exigirPerfil(usuarioDoToken(token), GESTAO);
     const produto = acharProduto(Number(params[0]));
+    // Já vendido (está em algum pedido): só desativa e devolve o produto (200).
+    if (banco.pedidos.some((pedido) => pedido.itens.some((i) => i.produtoId === produto.id))) {
+      produto.ativo = false;
+      return produto;
+    }
+    // Nunca vendido: apaga de verdade (204, sem corpo).
     banco.produtos = banco.produtos.filter((p) => p.id !== produto.id);
     return null;
   }],

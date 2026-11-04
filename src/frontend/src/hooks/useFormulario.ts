@@ -23,7 +23,7 @@ export function useFormulario<T extends Record<string, string>>(
     return {
       name: nome,
       value: valores[nome],
-      onChange: (evento: ChangeEvent<HTMLInputElement>) => {
+      onChange: (evento: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const bruto = evento.target.value;
         const formatar = formatadores[nome];
         setValores((atual) => ({ ...atual, [nome]: formatar ? formatar(bruto) : bruto }));
@@ -43,5 +43,8 @@ export function useFormulario<T extends Record<string, string>>(
     return nomes.find((n) => erroDe(n) !== null) ?? null;
   }
 
-  return { valores, campo, validarTudo };
+  /** Algum campo mudou em relação aos valores iniciais. */
+  const sujo = (Object.keys(iniciais) as Array<keyof T>).some((n) => iniciais[n] !== valores[n]);
+
+  return { valores, campo, validarTudo, sujo };
 }

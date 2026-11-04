@@ -14,7 +14,11 @@ export const criarProduto = (dados: DadosProduto) => requisicao<Produto>("POST",
 export const editarProduto = (id: number, dados: DadosProduto) =>
   requisicao<Produto>("PUT", `/api/produtos/${id}`, dados);
 
-export const excluirProduto = (id: number) => requisicao<null>("DELETE", `/api/produtos/${id}`);
+/**
+ * 204 (null): o produto nunca foi vendido e foi apagado de verdade.
+ * 200 (Produto com ativo: false): já está em algum pedido, então o back só desativa.
+ */
+export const excluirProduto = (id: number) => requisicao<Produto | null>("DELETE", `/api/produtos/${id}`);
 
 /** Liga/desliga o produto no cardápio (switch "No cardápio"). */
 export const alterarProdutoAtivo = (id: number, ativo: boolean) =>
