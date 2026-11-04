@@ -35,6 +35,15 @@
   --panel-card: #ffffff;
   --neutral-button: #e3e3e8;
 
+  /* Folha (sheet) e controles */
+  --sheet-bg: #f2f2f7;
+  --sheet-card: #ffffff;
+  --sheet-fill: #e3e3e8;
+  --grabber: #c7c7cc;
+  --switch-on: #248a3d;
+  --switch-off: #d1d1d6;
+  --skeleton: rgba(120, 120, 128, 0.16);
+
   /* Tipografia */
   --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, "Segoe UI", Roboto, sans-serif;
   --text-large-title: 700 34px/1.1 var(--font);
@@ -67,6 +76,7 @@
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
   --duration-press: 160ms;
   --duration-segment: 380ms;
+  --duration-switch: 280ms;
 
   /* Materiais translúcidos */
   --material-blur: blur(20px) saturate(180%);
@@ -104,6 +114,14 @@
     --column: #2c2c2e;
     --panel-card: #3a3a3c;
     --neutral-button: #48484a;
+
+    --sheet-bg: #1c1c1e;
+    --sheet-card: #2c2c2e;
+    --sheet-fill: #3a3a3c;
+    --grabber: #5a5a5e;
+    --switch-on: #30d158;
+    --switch-off: #48484a;
+    --skeleton: rgba(120, 120, 128, 0.24);
 
     --shadow-thumb: 0 2px 8px rgba(0, 0, 0, 0.35);
     --shadow-float: 0 10px 30px rgba(0, 0, 0, 0.5);

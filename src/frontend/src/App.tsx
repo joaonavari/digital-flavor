@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import { RotaProtegida, RotaPublica } from "./components/RotaProtegida";
+import { Toaster } from "./components/Toast";
 import { AuthProvider } from "./contexts/AuthContext";
 import { LayoutAluno } from "./layouts/LayoutAluno";
 import { LayoutCantina } from "./layouts/LayoutCantina";
@@ -7,6 +8,7 @@ import { PERFIS_ADMIN, PERFIS_CANTINA, PERFIS_GESTAO } from "./lib/perfis";
 import { AcompanharPedido } from "./pages/AcompanharPedido";
 import { Cadastro } from "./pages/Cadastro";
 import { Cardapio } from "./pages/Cardapio";
+import { Componentes } from "./pages/Componentes";
 import { Fila } from "./pages/Fila";
 import { Login } from "./pages/Login";
 import { MeusPedidos } from "./pages/MeusPedidos";
@@ -51,9 +53,13 @@ export function App() {
             </Route>
           </Route>
 
+          {/* Vitrine de componentes: só existe em desenvolvimento. */}
+          {import.meta.env.DEV && <Route path="/componentes" element={<Componentes />} />}
+
           <Route path="*" element={<NaoEncontrada />} />
         </Routes>
       </AuthProvider>
+      <Toaster />
     </BrowserRouter>
   );
 }

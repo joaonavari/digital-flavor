@@ -1,11 +1,10 @@
+/* Presa no fim da moldura do aluno (LayoutAluno), com o conteúdo rolando por baixo. */
 .barra {
-  position: fixed;
+  position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
   z-index: 20;
-  max-width: var(--app-max-width);
-  margin-inline: auto;
   display: flex;
   justify-content: space-around;
   align-items: flex-start;

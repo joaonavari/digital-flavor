@@ -91,6 +91,24 @@ svg {
   backdrop-filter: var(--material-blur);
 }
 
+/*
+ * Tela de trás recuada enquanto uma folha está aberta no celular (estilo iOS).
+ * O fundo preto aparece aos poucos conforme a tela encolhe.
+ */
+[data-recuo] {
+  transform-origin: 50% 0;
+  transition: transform 350ms var(--ease-drawer);
+}
+
+body[data-folha="aberta"] {
+  background: #000;
+}
+
+body[data-folha="aberta"] [data-recuo] {
+  transform: translateY(max(env(safe-area-inset-top), 10px)) scale(0.94);
+  border-radius: 12px;
+}
+
 /* Texto só para leitores de tela. */
 .sr-only {
   position: absolute;
@@ -114,6 +132,13 @@ svg {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  [data-recuo] {
+    transition: none;
+  }
+  body[data-folha="aberta"] [data-recuo] {
+    transform: none;
+    border-radius: 0;
+  }
   .pressable {
     transition: none;
   }
