@@ -1,0 +1,64 @@
+.stepper {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--fill);
+}
+
+.botao {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--card);
+  color: var(--text);
+  transition:
+    transform var(--duration-press) var(--ease-out),
+    opacity 150ms ease;
+}
+
+/* Área de toque de 44px. */
+.botao::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+}
+
+.botao:active:not(:disabled) {
+  transform: scale(0.92);
+}
+
+.botao:disabled {
+  opacity: 0.35;
+}
+
+.mais {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.quantidade {
+  min-width: 22px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .botao {
+    transition: opacity 150ms ease;
+  }
+  .botao:active:not(:disabled) {
+    transform: none;
+    opacity: 0.7;
+  }
+}

@@ -1,0 +1,76 @@
+/* Pílulas com rolagem horizontal (estilo App Store). */
+.trilho {
+  --fade: 24px;
+  margin-inline: -16px;
+  padding: 2px 16px;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scroll-padding-inline: 16px;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+
+.trilho::-webkit-scrollbar {
+  display: none;
+}
+
+/* Fade nas bordas só do lado em que ainda há conteúdo para rolar. */
+.trilho[data-mais-inicio="true"][data-mais-fim="false"] {
+  mask-image: linear-gradient(to right, transparent, #000 var(--fade));
+}
+
+.trilho[data-mais-inicio="false"][data-mais-fim="true"] {
+  mask-image: linear-gradient(to left, transparent, #000 var(--fade));
+}
+
+.trilho[data-mais-inicio="true"][data-mais-fim="true"] {
+  mask-image: linear-gradient(to right, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
+}
+
+.pilula {
+  flex-shrink: 0;
+  min-height: 36px;
+  max-width: 220px;
+  padding: 0 16px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: var(--fill);
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition:
+    transform var(--duration-press) var(--ease-out),
+    background-color 150ms ease,
+    color 150ms ease;
+}
+
+.pilula:active {
+  transform: scale(0.97);
+}
+
+.pilula[aria-selected="true"] {
+  background: var(--text);
+  color: var(--bg);
+  font-weight: 600;
+}
+
+@media (pointer: coarse) {
+  .pilula {
+    min-height: 40px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pilula {
+    transition:
+      background-color 150ms ease,
+      color 150ms ease;
+  }
+  .pilula:active {
+    transform: none;
+  }
+}

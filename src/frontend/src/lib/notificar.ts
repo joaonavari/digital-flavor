@@ -5,7 +5,9 @@ import { mensagemDeErro } from "../api/http";
 export const notificar = {
   sucesso: (titulo: string, descricao?: string) => toast.success(titulo, { description: descricao }),
 
-  info: (titulo: string, descricao?: string) => toast.info(titulo, { description: descricao }),
+  /** Mesmo título + texto = mesmo toast (não duplica se a busca rodar duas vezes). */
+  info: (titulo: string, descricao?: string) =>
+    toast.info(titulo, { description: descricao, id: `${titulo}:${descricao ?? ""}` }),
 
   /** Mostra a mensagem do back (ou de rede). O id evita empilhar o mesmo erro várias vezes. */
   erro: (erro: unknown, titulo?: string) => {

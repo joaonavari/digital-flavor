@@ -51,7 +51,15 @@ export function resetarMock(): void {
   salvarBanco();
 }
 
-(globalThis as { dfResetarMock?: () => void }).dfResetarMock = resetarMock;
+/** Muda o estoque "por fora", como se outro aluno tivesse comprado (no console: dfAjustarEstoque(2, 1)). */
+export function ajustarEstoqueMock(produtoId: number, quantidade: number): void {
+  const produto = banco.produtos.find((p) => p.id === produtoId);
+  if (!produto) return;
+  produto.quantidadeEstoque = quantidade;
+  salvarBanco();
+}
+
+Object.assign(globalThis, { dfResetarMock: resetarMock, dfAjustarEstoque: ajustarEstoqueMock });
 
 /* ---------- Utilidades ---------- */
 

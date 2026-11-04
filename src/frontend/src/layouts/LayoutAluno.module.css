@@ -15,8 +15,14 @@
   height: 100%;
   overflow-y: auto;
   overscroll-behavior-y: contain;
+  /* Coluna de celular: sem barra de rolagem ocupando largura (no Windows ela desalinharia as barras flutuantes). */
+  scrollbar-width: none;
   /* Espaço para a tab bar não cobrir o fim da lista. */
   padding-bottom: calc(var(--tab-bar-height) + env(safe-area-inset-bottom));
+}
+
+.rolagem::-webkit-scrollbar {
+  display: none;
 }
 
 /* No computador, a coluna do celular fica centralizada com uma borda sutil. */
@@ -24,4 +30,18 @@
   .app {
     box-shadow: 0 0 0 0.5px var(--separator);
   }
+}
+
+/* Barras flutuantes das páginas (ex.: "Ver carrinho"), presas acima da tab bar. */
+.acessorio {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: calc(var(--tab-bar-height) + env(safe-area-inset-bottom) + 16px);
+  z-index: 15;
+  pointer-events: none;
+}
+
+.acessorio > * {
+  pointer-events: auto;
 }

@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import { RotaProtegida, RotaPublica } from "./components/RotaProtegida";
 import { Toaster } from "./components/Toast";
 import { AuthProvider } from "./contexts/AuthContext";
+import { CartProvider } from "./contexts/CartContext";
 import { LayoutAluno } from "./layouts/LayoutAluno";
 import { LayoutCantina } from "./layouts/LayoutCantina";
 import { PERFIS_ADMIN, PERFIS_CANTINA, PERFIS_GESTAO } from "./lib/perfis";
@@ -22,6 +23,7 @@ export function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+        <CartProvider>
         <Routes>
           <Route element={<RotaPublica />}>
             <Route path="/login" element={<Login />} />
@@ -58,6 +60,7 @@ export function App() {
 
           <Route path="*" element={<NaoEncontrada />} />
         </Routes>
+        </CartProvider>
       </AuthProvider>
       <Toaster />
     </BrowserRouter>
