@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Acompanhar pedido</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#0066CC}a:hover{color:#004C99}
+.press{transition:transform 160ms cubic-bezier(0.23,1,0.32,1)}
+.press:active{transform:scale(0.97)}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: {{t.bg}}; color: {{t.text}}; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, 'Segoe UI', Roboto, sans-serif;">
+
+  <div style="padding: 56px 16px 0 16px;">
+    <a href="Main.dc.html" style="min-height: 44px; display: inline-flex; align-items: center; gap: 2px; text-decoration: none; font-size: 17px; color: {{accent}};">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+      Cardápio
+    </a>
+  </div>
+
+  <div style="padding: 4px 20px 0 20px; display: flex; flex-direction: column; gap: 4px;">
+    <p style="margin: 0; font-size: 15px; font-weight: 500; color: {{t.sub}};">Pedido #[NÚMERO] · retirar no balcão</p>
+    <h1 style="margin: 0; font-size: 34px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em;">Em preparo</h1>
+  </div>
+
+  <div style="padding: 20px 16px 0 16px; display: flex; flex-direction: column; gap: 22px;">
+
+    <div style="border-radius: 20px; padding: 18px; background: {{t.card}}; display: flex; flex-direction: column;">
+      <div style="display: flex; gap: 14px; align-items: flex-start;">
+        <div style="display: flex; flex-direction: column; align-items: center;">
+          <div aria-hidden="true" style="width: 24px; height: 24px; border-radius: 999px; display: flex; align-items: center; justify-content: center; background: {{accent}}; color: {{onAccent}};">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+          </div>
+          <div aria-hidden="true" style="width: 2px; height: 30px; background: {{accent}};"></div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 2px; padding-top: 2px;">
+          <span style="font-size: 17px; font-weight: 600;">Recebido</span>
+          <span style="font-size: 13px; color: {{t.sub}};">Estoque reservado para você</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 14px; align-items: flex-start;">
+        <div style="display: flex; flex-direction: column; align-items: center;">
+          <div aria-hidden="true" style="width: 24px; height: 24px; border-radius: 999px; box-sizing: border-box; border: 7px solid {{accent}}; background: {{t.card}};"></div>
+          <div aria-hidden="true" style="width: 2px; height: 30px; background: {{t.trilho}};"></div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 2px; padding-top: 2px;">
+          <span style="font-size: 17px; font-weight: 700; color: {{accent}};">Em preparo</span>
+          <span style="font-size: 13px; color: {{t.sub}};">A cantina está montando seu pedido</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 14px; align-items: flex-start;">
+        <div style="display: flex; flex-direction: column; align-items: center;">
+          <div aria-hidden="true" style="width: 24px; height: 24px; border-radius: 999px; box-sizing: border-box; border: 2px solid {{t.trilho}};"></div>
+          <div aria-hidden="true" style="width: 2px; height: 30px; background: {{t.trilho}};"></div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 2px; padding-top: 2px;">
+          <span style="font-size: 17px; font-weight: 600; color: {{t.sub}};">Pronto</span>
+          <span style="font-size: 13px; color: {{t.sub}};">Avisamos quando puder retirar</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 14px; align-items: flex-start;">
+        <div aria-hidden="true" style="width: 24px; height: 24px; flex-shrink: 0; border-radius: 999px; box-sizing: border-box; border: 2px solid {{t.trilho}};"></div>
+        <span style="font-size: 17px; font-weight: 600; color: {{t.sub}}; padding-top: 2px;">Entregue</span>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <span style="padding-left: 4px; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: {{t.sub}};">Resumo</span>
+      <div style="border-radius: 18px; background: {{t.card}}; display: flex; flex-direction: column;">
+        <div style="display: flex; justify-content: space-between; padding: 13px 16px; border-bottom: 0.5px solid {{t.sep}}; font-size: 16px;">
+          <span>2× Coxinha de frango</span><span style="font-weight: 600;">R$ 13,00</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 13px 16px; border-bottom: 0.5px solid {{t.sep}}; font-size: 16px;">
+          <span>1× Suco de laranja</span><span style="font-weight: 600;">R$ 4,00</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 13px 16px; font-size: 16px;">
+          <span style="display: flex; align-items: center; gap: 8px;">PIX
+            <span style="padding: 2px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; background: {{tint}}; color: {{accentTexto}};">Aprovado</span>
+          </span>
+          <span style="font-size: 18px; font-weight: 700;">R$ 17,00</span>
+        </div>
+      </div>
+      <span style="padding: 2px 4px 0 4px; font-size: 13px; line-height: 1.4; color: {{t.sub}};">Como o pedido já está em preparo, não é mais possível cancelar.</span>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"enum","options":["Verde","Laranja","Azul"],"default":"Azul"},"dark":{"editor":"boolean","default":false},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var dark = this.props.dark ?? false;
+    var nomeCor = this.props.accent ?? 'Azul';
+    var cores = { Verde: ['#1F7A35', '#30D158'], Laranja: ['#C93400', '#FF9F0A'], Azul: ['#0066CC', '#0A84FF'] };
+    var par = cores[nomeCor] || cores.Azul;
+    var accent = dark ? par[1] : par[0];
+    var t = dark
+      ? { bg: '#000000', card: '#1C1C1E', text: '#F5F5F7', sub: '#A1A1A6', sep: 'rgba(84,84,88,0.65)', trilho: '#48484A' }
+      : { bg: '#F2F2F7', card: '#FFFFFF', text: '#1C1C1E', sub: '#6E6E73', sep: 'rgba(60,60,67,0.2)', trilho: '#D1D1D6' };
+    return {
+      t: t, accent: accent, onAccent: dark ? '#000000' : '#FFFFFF',
+      tint: accent + (dark ? '33' : '1F'), accentTexto: accent
+    };
+  }
+}
+</script>
+</body>
+</html>
