@@ -20,10 +20,15 @@ export function RotaProtegida({ perfis }: Props) {
   return <Outlet />;
 }
 
-/** Login e cadastro: quem já está logado vai direto para a tela inicial. */
+/** Login e cadastro: quem já está logado vai direto para a tela inicial (ou para onde tentou ir). */
 export function RotaPublica() {
   const { estado } = useAuth();
+  const local = useLocation();
   if (estado.status === "carregando") return null;
-  if (estado.status === "autenticado") return <Navigate to={rotaInicial(estado.usuario.tipo)} replace />;
+  if (estado.status === "autenticado") {
+    // Volta para onde a pessoa tentou ir antes do login; se o perfil não puder, a rota protegida redireciona.
+    const de = (local.state as { de?: string } | null)?.de;
+    return <Navigate to={de ?? rotaInicial(estado.usuario.tipo)} replace />;
+  }
   return <Outlet />;
 }

@@ -15,10 +15,10 @@ interface BaseProps {
   agrupado?: boolean;
 }
 
-type InputProps = BaseProps & InputHTMLAttributes<HTMLInputElement> & { multilinha?: false };
+export type TextFieldInputProps = BaseProps & InputHTMLAttributes<HTMLInputElement> & { multilinha?: false };
 type AreaProps = BaseProps & TextareaHTMLAttributes<HTMLTextAreaElement> & { multilinha: true };
 
-export function TextField(props: InputProps | AreaProps) {
+export function TextField(props: TextFieldInputProps | AreaProps) {
   const { rotulo, erro, dica, prefixo, acessorio, agrupado = false, id, className, ...resto } = props;
   const idGerado = useId();
   const idCampo = id ?? idGerado;
