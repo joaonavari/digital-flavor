@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router";
 import { ErroApi, mensagemDeErro } from "../../api/http";
-import { cancelarPedido, listarMeusPedidos } from "../../api/pedidos";
+import { buscarPedido, cancelarPedido } from "../../api/pedidos";
 import { AlertDialog } from "../../components/AlertDialog";
 import { BotaoIcone, Button } from "../../components/Button";
 import { EmptyState, EstadoErro } from "../../components/EmptyState";
@@ -44,9 +44,10 @@ const Voltar = () => (
 export function AcompanharPedido() {
   const { id } = useParams();
   const idPedido = Number(id);
-  // O contrato não tem GET /api/pedidos/{id}: o pedido vem da lista do próprio aluno.
-  const { dados, setDados, erro, carregando, tentandoDeNovo, tentarDeNovo, recarregar } = useRecurso(listarMeusPedidos);
-  const pedido = dados?.find((p) => p.id === idPedido) ?? null;
+  const buscar = useCallback(() => buscarPedido(idPedido), [idPedido]);
+  const { dados: pedido, setDados, erro, carregando, tentandoDeNovo, tentarDeNovo, recarregar } = useRecurso(buscar);
+  // 403 (pedido de outro aluno) e 404 aparecem do mesmo jeito: "não encontrado".
+  const naoEncontrado = erro instanceof ErroApi && (erro.status === 403 || erro.status === 404);
 
   const [confirmando, setConfirmando] = useState(false);
   const [cancelando, setCancelando] = useState(false);
@@ -76,7 +77,7 @@ export function AcompanharPedido() {
     setCancelando(true);
     try {
       const atualizado = await cancelarPedido(pedido.id);
-      setDados((lista) => lista?.map((p) => (p.id === atualizado.id ? atualizado : p)) ?? lista);
+      setDados(atualizado);
       setConfirmando(false);
       notificar.sucesso("Pedido cancelado", "O valor será estornado.");
     } catch (e) {
@@ -120,7 +121,7 @@ export function AcompanharPedido() {
         </header>
         <div className={estilos.corpo}>
           <div className={estilos.estado}>
-            {erro && !dados ? (
+            {erro && !naoEncontrado ? (
               <EstadoErro mensagem={mensagemDeErro(erro)} aoTentarDeNovo={tentarDeNovo} tentando={tentandoDeNovo} />
             ) : (
               <EmptyState titulo="Pedido não encontrado" descricao="Confira na sua lista de pedidos." />

@@ -16,5 +16,9 @@ export const editarProduto = (id: number, dados: DadosProduto) =>
 
 export const excluirProduto = (id: number) => requisicao<null>("DELETE", `/api/produtos/${id}`);
 
+/** Liga/desliga o produto no cardápio (switch "No cardápio"). */
+export const alterarProdutoAtivo = (id: number, ativo: boolean) =>
+  requisicao<Produto>("PATCH", `/api/produtos/${id}/ativo`, { ativo });
+
 export const ajustarEstoque = (id: number, quantidade: number) =>
   requisicao<Produto>("PATCH", `/api/produtos/${id}/estoque`, { quantidade });

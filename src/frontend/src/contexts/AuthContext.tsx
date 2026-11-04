@@ -70,6 +70,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     salvarToken(token);
     salvarUsuario(usuario);
     setEstado({ status: "autenticado", usuario });
+    // O login devolve o básico; /me completa com telefone, matrícula e turma (sem travar a entrada).
+    buscarUsuarioLogado()
+      .then((completo) => {
+        salvarUsuario(completo);
+        setEstado((atual) =>
+          atual.status === "autenticado" && atual.usuario.id === completo.id
+            ? { status: "autenticado", usuario: completo }
+            : atual,
+        );
+      })
+      .catch(() => undefined);
     return usuario;
   }, []);
 

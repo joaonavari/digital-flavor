@@ -71,12 +71,21 @@ const erro = (status: number, mensagem: string) => new ErroApi(status, mensagem)
 
 const arredondar = (valor: number) => Math.round(valor * 100) / 100;
 
+/** Login devolve o básico; /me devolve também telefone e, para ALUNO, matrícula e turma. */
 function paraUsuarioLogado(u: UsuarioMock): UsuarioLogado {
   return { id: u.id, nome: u.nome, email: u.email, tipo: u.tipo };
 }
 
+function paraMe(u: UsuarioMock): UsuarioLogado {
+  return {
+    ...paraUsuarioLogado(u),
+    telefone: u.telefone ?? null,
+    ...(u.tipo === "ALUNO" ? { matricula: u.matricula ?? null, turma: u.turma ?? null } : {}),
+  };
+}
+
 function paraUsuario(u: UsuarioMock): Usuario {
-  return { ...paraUsuarioLogado(u), ativo: u.ativo };
+  return { id: u.id, nome: u.nome, email: u.email, tipo: u.tipo, ativo: u.ativo };
 }
 
 function usuarioDoToken(token: string | null): UsuarioMock {
@@ -157,14 +166,14 @@ const rotas: Array<[Metodo, RegExp, Manipulador]> = [
       senha: dados.senha,
       tipo: "ALUNO",
       ativo: true,
-      telefone: dados.telefone,
+      telefone: dados.telefone || undefined,
       matricula: dados.matricula.trim(),
-      turma: dados.turma,
+      turma: dados.turma || undefined,
     };
     banco.usuarios.push(novo);
     return paraUsuarioLogado(novo);
   }],
-  ["GET", /^\/api\/auth\/me$/, ({ token }) => paraUsuarioLogado(usuarioDoToken(token))],
+  ["GET", /^\/api\/auth\/me$/, ({ token }) => paraMe(usuarioDoToken(token))],
 
   /* Produtos */
   ["GET", /^\/api\/produtos$/, ({ token }) => {
@@ -199,8 +208,7 @@ const rotas: Array<[Metodo, RegExp, Manipulador]> = [
   ["PUT", /^\/api\/produtos\/(\d+)$/, ({ token, params, corpo }) => {
     exigirPerfil(usuarioDoToken(token), GESTAO);
     const produto = acharProduto(Number(params[0]));
-    // "ativo" não está no contrato do PUT; o mock aceita até o back definir como ligar/desligar.
-    const dados = corpo as DadosProduto & { ativo?: boolean };
+    const dados = corpo as DadosProduto;
     validarProduto(dados);
     Object.assign(produto, {
       nome: dados.nome.trim(),
@@ -209,7 +217,6 @@ const rotas: Array<[Metodo, RegExp, Manipulador]> = [
       categoria: dados.categoria?.trim() || null,
       quantidadeEstoque: dados.quantidadeEstoque,
       imagemUrl: dados.imagemUrl?.trim() || null,
-      ...(typeof dados.ativo === "boolean" ? { ativo: dados.ativo } : {}),
     });
     return produto;
   }],
@@ -218,6 +225,14 @@ const rotas: Array<[Metodo, RegExp, Manipulador]> = [
     const produto = acharProduto(Number(params[0]));
     banco.produtos = banco.produtos.filter((p) => p.id !== produto.id);
     return null;
+  }],
+  ["PATCH", /^\/api\/produtos\/(\d+)\/ativo$/, ({ token, params, corpo }) => {
+    exigirPerfil(usuarioDoToken(token), GESTAO);
+    const produto = acharProduto(Number(params[0]));
+    const { ativo } = corpo as { ativo: boolean };
+    if (typeof ativo !== "boolean") throw erro(400, "Informe se o produto fica no cardápio.");
+    produto.ativo = ativo;
+    return produto;
   }],
   ["PATCH", /^\/api\/produtos\/(\d+)\/estoque$/, ({ token, params, corpo }) => {
     exigirPerfil(usuarioDoToken(token), GESTAO);
@@ -319,6 +334,14 @@ const rotas: Array<[Metodo, RegExp, Manipulador]> = [
     return pedido;
   }],
 
+  ["GET", /^\/api\/pedidos\/(\d+)$/, ({ token, params }) => {
+    const usuario = usuarioDoToken(token);
+    const pedido = acharPedido(Number(params[0]));
+    // ALUNO só vê o próprio pedido; a cantina vê qualquer um.
+    if (usuario.tipo === "ALUNO" && banco.donos[pedido.id] !== usuario.id) throw erro(403, "Este pedido não é seu.");
+    return pedido;
+  }],
+
   /* Vendas */
   ["GET", /^\/api\/vendas$/, ({ token, busca }) => {
     exigirPerfil(usuarioDoToken(token), GESTAO);
@@ -355,6 +378,8 @@ const rotas: Array<[Metodo, RegExp, Manipulador]> = [
     const dados = corpo as DadosNovoUsuario;
     if (!dados.nome?.trim() || !dados.email?.trim() || !dados.senha) throw erro(400, "Preencha nome, e-mail e senha.");
     if (!["FUNCIONARIO", "GERENTE", "ADMINISTRADOR"].includes(dados.tipo)) throw erro(400, "Perfil inválido.");
+    if (dados.tipo === "FUNCIONARIO" && !dados.matriculaFuncional?.trim())
+      throw erro(400, "Informe a matrícula funcional do funcionário.");
     if (banco.usuarios.some((u) => u.email.toLowerCase() === dados.email.trim().toLowerCase()))
       throw erro(400, "Já existe uma conta com este e-mail.");
     const novo: UsuarioMock = {
@@ -364,6 +389,10 @@ const rotas: Array<[Metodo, RegExp, Manipulador]> = [
       senha: dados.senha,
       tipo: dados.tipo,
       ativo: true,
+      telefone: dados.telefone || undefined,
+      ...(dados.tipo === "FUNCIONARIO" ? { matriculaFuncional: dados.matriculaFuncional.trim(), turno: dados.turno } : {}),
+      ...(dados.tipo === "GERENTE" ? { setor: dados.setor } : {}),
+      ...(dados.tipo === "ADMINISTRADOR" ? { nivelAcesso: dados.nivelAcesso } : {}),
     };
     banco.usuarios.push(novo);
     return paraUsuario(novo);

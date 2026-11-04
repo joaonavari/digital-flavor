@@ -1,6 +1,7 @@
 import { useAuth } from "../../contexts/useAuth";
 import { NOME_PERFIL } from "../../lib/perfis";
 import { inicial } from "../../lib/texto";
+import { mascararTelefone } from "../../lib/validacao";
 import estilos from "./Perfil.module.css";
 
 export function Perfil() {
@@ -24,8 +25,25 @@ export function Perfil() {
           </div>
         </div>
 
-        {/* Matrícula: o /api/auth/me do contrato não devolve esse campo (combinar com o back). */}
         <dl className={estilos.grupo}>
+          {usuario.matricula && (
+            <div className={estilos.linha}>
+              <dt>Matrícula</dt>
+              <dd>{usuario.matricula}</dd>
+            </div>
+          )}
+          {usuario.turma && (
+            <div className={estilos.linha}>
+              <dt>Turma</dt>
+              <dd>{usuario.turma}</dd>
+            </div>
+          )}
+          {usuario.telefone && (
+            <div className={estilos.linha}>
+              <dt>Telefone</dt>
+              <dd>{mascararTelefone(usuario.telefone)}</dd>
+            </div>
+          )}
           <div className={estilos.linha}>
             <dt>Conta</dt>
             <dd>{NOME_PERFIL[usuario.tipo]}</dd>

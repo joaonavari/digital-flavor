@@ -9,12 +9,18 @@ export type StatusPedido = "RECEBIDO" | "EM_PREPARO" | "CANCELADO" | "PRONTO" | 
 
 export type MetodoPagamento = "PIX" | "CARTAO";
 
-/** Usuário retornado por /api/auth/login e /api/auth/me. */
+/**
+ * Usuário retornado por /api/auth/login e /api/auth/me.
+ * matricula e turma só vêm para ALUNO.
+ */
 export interface UsuarioLogado {
   id: number;
   nome: string;
   email: string;
   tipo: TipoUsuario;
+  telefone?: string | null;
+  matricula?: string | null;
+  turma?: string | null;
 }
 
 export interface RespostaLogin {
@@ -111,21 +117,29 @@ export interface RelatorioVendas {
   porProduto: VendaPorProduto[];
 }
 
-/*
- * O contrato não detalha o corpo de /api/usuarios.
- * Assumido: o mesmo do usuário logado + "ativo" (por causa do PATCH .../ativo).
- * Confirmar com o back.
- */
-export interface Usuario extends UsuarioLogado {
+/** Item de GET /api/usuarios. */
+export interface Usuario {
+  id: number;
+  nome: string;
+  email: string;
+  tipo: TipoUsuario;
   ativo: boolean;
 }
 
-export interface DadosNovoUsuario {
+interface BaseNovoUsuario {
   nome: string;
   email: string;
   senha: string;
-  tipo: Exclude<TipoUsuario, "ALUNO">;
+  telefone?: string;
 }
+
+/** Corpo de POST /api/usuarios: os campos extras dependem do tipo. */
+export type DadosNovoUsuario = BaseNovoUsuario &
+  (
+    | { tipo: "FUNCIONARIO"; matriculaFuncional: string; turno?: string }
+    | { tipo: "GERENTE"; setor?: string }
+    | { tipo: "ADMINISTRADOR"; nivelAcesso?: string }
+  );
 
 /** Corpo de erro da API. */
 export interface ErroResposta {

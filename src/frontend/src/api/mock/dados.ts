@@ -14,6 +14,11 @@ export interface UsuarioMock {
   telefone?: string;
   matricula?: string;
   turma?: string;
+  // Campos extras por tipo (POST /api/usuarios)
+  matriculaFuncional?: string;
+  turno?: string;
+  setor?: string;
+  nivelAcesso?: string;
 }
 
 export interface BancoMock {
@@ -100,10 +105,10 @@ export function criarBancoInicial(): BancoMock {
   ];
 
   const usuarios: UsuarioMock[] = [
-    { id: 1, nome: "Maria Souza", email: "aluno@escola.com", senha: "123456", tipo: "ALUNO", ativo: true, matricula: "2025001", turma: "3º A" },
-    { id: 2, nome: "Carlos Lima", email: "funcionario@escola.com", senha: "123456", tipo: "FUNCIONARIO", ativo: true },
-    { id: 3, nome: "Beatriz Rocha", email: "gerente@escola.com", senha: "123456", tipo: "GERENTE", ativo: true },
-    { id: 4, nome: "Admin", email: "admin@escola.com", senha: "123456", tipo: "ADMINISTRADOR", ativo: true },
+    { id: 1, nome: "Maria Souza", email: "aluno@escola.com", senha: "123456", tipo: "ALUNO", ativo: true, telefone: "44999998888", matricula: "2025001", turma: "3º A" },
+    { id: 2, nome: "Carlos Lima", email: "funcionario@escola.com", senha: "123456", tipo: "FUNCIONARIO", ativo: true, matriculaFuncional: "F-0012", turno: "Manhã" },
+    { id: 3, nome: "Beatriz Rocha", email: "gerente@escola.com", senha: "123456", tipo: "GERENTE", ativo: true, setor: "Cantina" },
+    { id: 4, nome: "Admin", email: "admin@escola.com", senha: "123456", tipo: "ADMINISTRADOR", ativo: true, nivelAcesso: "TOTAL" },
   ];
 
   return { usuarios, produtos, pedidos, donos: { 101: 1, 92: 1, 80: 1 }, proximoId: { usuario: 5, produto: 9, pedido: 109 } };

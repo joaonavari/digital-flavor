@@ -3,6 +3,9 @@ import { requisicao } from "./http";
 
 export const confirmarPedido = (dados: DadosNovoPedido) => requisicao<Pedido>("POST", "/api/pedidos", dados);
 
+/** ALUNO só vê o próprio pedido (403 se não for dele); a cantina vê qualquer um. */
+export const buscarPedido = (id: number) => requisicao<Pedido>("GET", `/api/pedidos/${id}`);
+
 export const listarMeusPedidos = () => requisicao<Pedido[]>("GET", "/api/pedidos/meus");
 
 export const listarFila = () => requisicao<Pedido[]>("GET", "/api/pedidos/fila");
