@@ -1,0 +1,216 @@
+.cabecalho {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.titulo {
+  font-size: 28px;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: var(--tracking-title);
+}
+
+.subtitulo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/* Ponto verde "ao vivo": pulsa devagar só com opacidade. */
+.aoVivo {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--success);
+  animation: pulso 2.4s ease-in-out infinite;
+}
+
+.aoVivo[data-erro="true"] {
+  background: var(--danger);
+  animation: none;
+}
+
+@keyframes pulso {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* As três etapas ficam lado a lado sempre que cabem (≥ 600px); no celular, uma embaixo da outra. */
+.area {
+  container: fila / inline-size;
+}
+
+.colunas {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+@container fila (min-width: 600px) {
+  .colunas {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.coluna {
+  min-width: 0;
+  padding: 12px;
+  border-radius: var(--radius-group);
+  background: var(--column);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.colunaTopo {
+  padding: 4px 6px 2px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.colunaTitulo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.ponto {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  flex-shrink: 0;
+}
+
+.contagem {
+  min-width: 24px;
+  height: 22px;
+  padding: 0 7px;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  background: var(--panel-card);
+  color: var(--text-secondary);
+}
+
+.lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.vazia {
+  padding: 22px 8px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.card {
+  padding: 14px;
+  border-radius: var(--radius-panel-card);
+  background: var(--panel-card);
+  box-shadow: var(--shadow-panel-card);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cardTopo {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.numero {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: var(--tracking-headline);
+  font-variant-numeric: tabular-nums;
+}
+
+.tempo {
+  flex-shrink: 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+/* Pedido esperando há muito tempo: o tempo fica em laranja. */
+.tempo[data-atrasado="true"] {
+  font-weight: 600;
+  color: var(--warning-fg);
+}
+
+.aluno {
+  font-size: 14px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.itens {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.itens li {
+  overflow-wrap: anywhere;
+}
+
+.estado {
+  border-radius: var(--radius-group);
+  background: var(--column);
+}
+
+.esqueleto {
+  padding: 12px;
+  border-radius: var(--radius-group);
+  background: var(--column);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.esqueletoCard {
+  padding: 14px;
+  border-radius: var(--radius-panel-card);
+  background: var(--panel-card);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Botão de ação: 38px no computador, 44px no toque. */
+@media (pointer: coarse) {
+  .card button.acao {
+    min-height: var(--tap);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aoVivo {
+    animation: none;
+  }
+}
