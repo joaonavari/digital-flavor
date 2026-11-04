@@ -1,0 +1,119 @@
+.tela {
+  max-width: var(--app-max-width);
+  min-height: 100dvh;
+  margin-inline: auto;
+  padding: 72px 16px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.cabecalho {
+  padding: 0 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.titulo {
+  font: var(--text-large-title);
+  letter-spacing: var(--tracking-title);
+}
+
+.subtitulo {
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Campos agrupados num card, estilo Ajustes do iOS. */
+.grupo {
+  border-radius: var(--radius-group);
+  background: var(--card);
+  overflow: hidden;
+}
+
+.campo {
+  min-height: var(--tap);
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.campo {
+  position: relative;
+}
+
+/* Divisória entre campos, recuada como nas listas do iOS. */
+.campo + .campo::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 16px;
+  right: 0;
+  height: 0.5px;
+  background: var(--separator);
+}
+
+.rotulo {
+  flex: 0 0 72px;
+  font-size: 17px;
+}
+
+.entrada {
+  flex: 1;
+  min-width: 0;
+  min-height: var(--tap);
+  border: none;
+  background: transparent;
+  font-size: 17px;
+}
+
+.entrada:focus-visible {
+  outline: none;
+}
+
+.campo:focus-within {
+  background: color-mix(in srgb, var(--accent) 6%, var(--card));
+}
+
+.erro {
+  padding: 0 4px;
+  font-size: 15px;
+  color: var(--danger);
+}
+
+.botao {
+  min-height: 50px;
+  border: none;
+  border-radius: var(--radius-pill);
+  font-size: 17px;
+  font-weight: 600;
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.botao:disabled {
+  opacity: 0.6;
+}
+
+.rodape {
+  text-align: center;
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+
+.dica {
+  padding: 12px 16px;
+  border-radius: var(--radius-group);
+  background: var(--fill);
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}

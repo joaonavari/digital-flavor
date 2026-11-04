@@ -1,0 +1,147 @@
+.sidebar {
+  flex: 1 1 220px;
+  min-width: 200px;
+  max-width: 240px;
+  padding: 24px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--sidebar);
+  border-right: 0.5px solid var(--separator);
+}
+
+.marca {
+  padding: 0 10px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.nomeApp {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: var(--tracking-headline);
+}
+
+.perfil {
+  font-size: 13px;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item,
+.sair {
+  width: 100%;
+  min-height: 36px;
+  padding: 0 10px;
+  border: none;
+  border-radius: var(--radius-nav);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  background: transparent;
+  white-space: nowrap;
+  transition:
+    transform var(--duration-press) var(--ease-out),
+    background-color 150ms ease;
+}
+
+.ativo {
+  font-weight: 600;
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.rodape {
+  margin-top: auto;
+  padding-top: 16px;
+}
+
+.sair {
+  color: var(--text-secondary);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .item:not(.ativo):hover,
+  .sair:hover {
+    background: var(--fill);
+    color: var(--text);
+  }
+  .ativo:hover {
+    color: var(--on-accent);
+  }
+}
+
+/* Celular: a sidebar fica empilhada em cima, com os itens numa linha que rola. */
+@media (max-width: 720px) {
+  .sidebar {
+    flex: 1 1 100%;
+    max-width: none;
+    min-width: 0;
+    padding: 16px 16px 12px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-right: none;
+    border-bottom: 0.5px solid var(--separator);
+  }
+
+  .marca {
+    padding: 0;
+    flex: 1 1 0;
+  }
+
+  .navegacao {
+    order: 3;
+    flex: 1 1 100%;
+    margin-inline: -16px;
+    padding-inline: 16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .navegacao::-webkit-scrollbar {
+    display: none;
+  }
+
+  .lista {
+    flex-direction: row;
+    gap: 6px;
+  }
+
+  .item {
+    min-height: var(--tap);
+    padding: 0 14px;
+    border-radius: var(--radius-pill);
+    background: var(--fill);
+  }
+
+  .rodape {
+    margin: 0;
+    padding: 0;
+  }
+
+  .sair {
+    width: auto;
+    min-height: var(--tap);
+    border-radius: var(--radius-pill);
+  }
+}

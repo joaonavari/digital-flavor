@@ -1,0 +1,3 @@
+# O .gitignore da raiz ignora .env.*; o exemplo precisa ir para o repositório.
+!.env.example
+*.tsbuildinfo

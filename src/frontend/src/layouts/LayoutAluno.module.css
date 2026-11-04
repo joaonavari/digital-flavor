@@ -1,0 +1,19 @@
+.app {
+  position: relative;
+  max-width: var(--app-max-width);
+  min-height: 100dvh;
+  margin-inline: auto;
+  background: var(--bg);
+}
+
+.conteudo {
+  /* Espaço para a tab bar não cobrir o fim da lista. */
+  padding-bottom: calc(var(--tab-bar-height) + env(safe-area-inset-bottom));
+}
+
+/* No computador, a coluna do celular fica centralizada com uma borda sutil. */
+@media (min-width: 520px) {
+  .app {
+    box-shadow: 0 0 0 0.5px var(--separator);
+  }
+}
