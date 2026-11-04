@@ -1,0 +1,110 @@
+.linha {
+  margin: 0;
+  padding: 18px;
+  list-style: none;
+  border-radius: var(--radius-card);
+  background: var(--card);
+}
+
+.passo {
+  display: flex;
+  gap: 14px;
+  align-items: stretch;
+}
+
+.trilho {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Bolinha: feito (cheia com check), atual (anel grosso), futuro (contorno). */
+.ponto {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--track);
+  background: var(--card);
+  color: var(--on-accent);
+  transition:
+    background-color 300ms ease,
+    border-color 300ms ease;
+}
+
+.feito .ponto {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.atual .ponto {
+  border: 7px solid var(--accent);
+}
+
+.cancelado .ponto {
+  border-color: var(--danger);
+  background: var(--danger);
+}
+
+.conector {
+  width: 2px;
+  flex: 1;
+  min-height: 30px;
+  background: var(--track);
+  transition: background-color 300ms ease;
+}
+
+.feito .conector {
+  background: var(--accent);
+}
+
+.texto {
+  min-width: 0;
+  padding: 2px 0 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.passo:last-child .texto {
+  padding-bottom: 0;
+}
+
+.titulo {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: color 300ms ease;
+}
+
+.feito .titulo {
+  color: var(--text);
+}
+
+.atual .titulo {
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.cancelado .titulo {
+  font-weight: 700;
+  color: var(--danger);
+}
+
+.descricao {
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--text-secondary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ponto,
+  .conector,
+  .titulo {
+    transition: none;
+  }
+}

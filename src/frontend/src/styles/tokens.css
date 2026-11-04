@@ -43,6 +43,8 @@
   --switch-on: #248a3d;
   --switch-off: #d1d1d6;
   --skeleton: rgba(120, 120, 128, 0.16);
+  --track: #d1d1d6;
+  --success-tint: color-mix(in srgb, var(--success) 12%, transparent);
 
   /* Tipografia */
   --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, "Segoe UI", Roboto, sans-serif;
@@ -122,6 +124,8 @@
     --switch-on: #30d158;
     --switch-off: #48484a;
     --skeleton: rgba(120, 120, 128, 0.24);
+    --track: #48484a;
+    --success-tint: color-mix(in srgb, var(--success) 20%, transparent);
 
     --shadow-thumb: 0 2px 8px rgba(0, 0, 0, 0.35);
     --shadow-float: 0 10px 30px rgba(0, 0, 0, 0.5);

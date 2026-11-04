@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import { RotaProtegida, RotaPublica } from "./components/RotaProtegida";
 import { Toaster } from "./components/Toast";
@@ -6,24 +7,30 @@ import { CartProvider } from "./contexts/CartContext";
 import { LayoutAluno } from "./layouts/LayoutAluno";
 import { LayoutCantina } from "./layouts/LayoutCantina";
 import { PERFIS_ADMIN, PERFIS_CANTINA, PERFIS_GESTAO } from "./lib/perfis";
-import { AcompanharPedido } from "./pages/AcompanharPedido";
-import { Cadastro } from "./pages/Cadastro";
-import { Cardapio } from "./pages/Cardapio";
-import { Componentes } from "./pages/Componentes";
-import { Fila } from "./pages/Fila";
-import { Login } from "./pages/Login";
-import { MeusPedidos } from "./pages/MeusPedidos";
-import { NaoEncontrada } from "./pages/NaoEncontrada";
-import { Perfil } from "./pages/Perfil";
-import { Produtos } from "./pages/Produtos";
-import { Usuarios } from "./pages/Usuarios";
-import { Vendas } from "./pages/Vendas";
+
+/* Cada tela vira um pedaço separado: o aluno não baixa as telas da cantina e vice-versa. */
+const AcompanharPedido = lazy(() => import("./pages/AcompanharPedido").then((m) => ({ default: m.AcompanharPedido })));
+const Cadastro = lazy(() => import("./pages/Cadastro").then((m) => ({ default: m.Cadastro })));
+const Cardapio = lazy(() => import("./pages/Cardapio").then((m) => ({ default: m.Cardapio })));
+// Vitrine de componentes: só existe em desenvolvimento (nem entra no build final).
+const Componentes = import.meta.env.DEV
+  ? lazy(() => import("./pages/Componentes").then((m) => ({ default: m.Componentes })))
+  : null;
+const Fila = lazy(() => import("./pages/Fila").then((m) => ({ default: m.Fila })));
+const Login = lazy(() => import("./pages/Login").then((m) => ({ default: m.Login })));
+const MeusPedidos = lazy(() => import("./pages/MeusPedidos").then((m) => ({ default: m.MeusPedidos })));
+const NaoEncontrada = lazy(() => import("./pages/NaoEncontrada").then((m) => ({ default: m.NaoEncontrada })));
+const Perfil = lazy(() => import("./pages/Perfil").then((m) => ({ default: m.Perfil })));
+const Produtos = lazy(() => import("./pages/Produtos").then((m) => ({ default: m.Produtos })));
+const Usuarios = lazy(() => import("./pages/Usuarios").then((m) => ({ default: m.Usuarios })));
+const Vendas = lazy(() => import("./pages/Vendas").then((m) => ({ default: m.Vendas })));
 
 export function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
         <CartProvider>
+        <Suspense fallback={null}>
         <Routes>
           <Route element={<RotaPublica />}>
             <Route path="/login" element={<Login />} />
@@ -56,10 +63,11 @@ export function App() {
           </Route>
 
           {/* Vitrine de componentes: só existe em desenvolvimento. */}
-          {import.meta.env.DEV && <Route path="/componentes" element={<Componentes />} />}
+          {Componentes && <Route path="/componentes" element={<Componentes />} />}
 
           <Route path="*" element={<NaoEncontrada />} />
         </Routes>
+        </Suspense>
         </CartProvider>
       </AuthProvider>
       <Toaster />

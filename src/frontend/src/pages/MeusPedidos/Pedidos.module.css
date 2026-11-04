@@ -1,0 +1,250 @@
+.cabecalho {
+  padding: max(env(safe-area-inset-top), 60px) 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cabecalhoComVoltar {
+  padding-top: max(env(safe-area-inset-top), 12px);
+}
+
+.voltar {
+  align-self: flex-start;
+  min-height: var(--tap);
+  margin-left: -6px;
+  padding-right: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 17px;
+  text-decoration: none;
+  color: var(--accent);
+  transition: transform var(--duration-press) var(--ease-out);
+}
+
+.voltar:active {
+  transform: scale(0.97);
+}
+
+.sobretitulo {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.titulo {
+  font: var(--text-large-title);
+  letter-spacing: var(--tracking-title);
+}
+
+.corpo {
+  padding: 20px 16px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.secao {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.secao > :global(.section-label) {
+  padding-left: 4px;
+}
+
+.grupo {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-radius: var(--radius-group);
+  background: var(--card);
+  overflow: hidden;
+}
+
+/* Linha de pedido (Meus pedidos) */
+.linhaPedido {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  padding: 12px 12px 12px 16px;
+  color: var(--text);
+  text-decoration: none;
+  transition: background-color 150ms ease;
+}
+
+/* Divisória recuada entre linhas, como nas listas do iOS. */
+.grupo > li {
+  position: relative;
+}
+
+.grupo > li + li::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 16px;
+  right: 0;
+  height: 0.5px;
+  background: var(--separator);
+  z-index: 1;
+}
+
+.linhaPedido:active {
+  background: var(--fill);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .linhaPedido:hover {
+    background: color-mix(in srgb, var(--fill) 60%, var(--card));
+  }
+}
+
+.linhaTexto {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.numero {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.meta {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.resumoItens {
+  font-size: 13px;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.linhaDireita {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.valor {
+  font-size: 15px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.chevron {
+  flex-shrink: 0;
+  color: var(--track);
+}
+
+/* Resumo do pedido (Acompanhar) */
+.linhaResumo {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: 13px 16px;
+  font-size: 16px;
+}
+
+.linhaResumo > span:first-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.linhaResumo > span:last-child {
+  flex-shrink: 0;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.linhaPagamento {
+  align-items: center;
+}
+
+.pagamento {
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+}
+
+.total {
+  font-size: 18px;
+  font-weight: 700 !important;
+}
+
+.nota {
+  padding: 2px 4px 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--text-secondary);
+}
+
+/* Código PIX copia e cola */
+.pix {
+  padding: 14px 16px;
+  border-radius: var(--radius-group);
+  background: var(--card);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pixTexto {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pixRotulo {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.pixCodigo {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.esqueleto {
+  padding: 16px;
+  border-radius: var(--radius-group);
+  background: var(--card);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.estado {
+  border-radius: var(--radius-card);
+  background: var(--card);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .voltar {
+    transition: none;
+  }
+  .voltar:active {
+    transform: none;
+    opacity: 0.7;
+  }
+}

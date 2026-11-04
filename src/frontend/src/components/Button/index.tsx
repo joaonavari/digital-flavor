@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, MouseEvent, ReactNode } from "react";
+import type { ButtonHTMLAttributes, MouseEvent, ReactNode, Ref } from "react";
 import estilos from "./Button.module.css";
 
 type Variante = "primario" | "secundario" | "neutro" | "sucesso" | "perigo" | "perigoSolido" | "simples";
@@ -11,6 +11,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /** Mostra um indicador e ignora cliques, sem mudar o tamanho do botão. */
   carregando?: boolean;
   icone?: ReactNode;
+  ref?: Ref<HTMLButtonElement>;
 }
 
 export function Button({
@@ -23,6 +24,7 @@ export function Button({
   children,
   type = "button",
   onClick,
+  ref,
   ...resto
 }: ButtonProps) {
   const classes = [
@@ -44,6 +46,7 @@ export function Button({
 
   return (
     <button
+      ref={ref}
       type={type}
       className={classes}
       aria-busy={carregando || undefined}
