@@ -26,4 +26,15 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select p from Produto p where p.id = :id")
     Optional<Produto> buscarParaAtualizarEstoque(@Param("id") Long id);
+
+    /**
+     * Produto ja vendido nao pode ser apagado. Consulta a tabela item_pedido
+     * diretamente, sem depender da entidade de pedido.
+     */
+    default boolean estaEmPedido(Long produtoId) {
+        return contarItensDePedido(produtoId).longValue() > 0;
+    }
+
+    @Query(value = "select count(*) from item_pedido where produto_id = :produtoId", nativeQuery = true)
+    Number contarItensDePedido(@Param("produtoId") Long produtoId);
 }

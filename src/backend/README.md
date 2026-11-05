@@ -2,6 +2,27 @@
 
 API REST do Digital Flavor em Java 17 + Spring Boot 3, com MySQL.
 
+## Endpoints
+
+Autenticação por JWT no cabeçalho `Authorization: Bearer <token>`. Erros sempre no formato `{ "mensagem": "..." }`.
+
+| Método | Rota | Quem pode |
+|--------|------|-----------|
+| POST | `/api/auth/cadastro` | público (cria um Aluno) |
+| POST | `/api/auth/login` | público, devolve `{ token, usuario }` |
+| GET | `/api/auth/me` | autenticado |
+| GET | `/api/produtos` | público (só ativos com estoque, RN04) |
+| GET | `/api/produtos/todos`, `/api/produtos/{id}` | GERENTE, ADMINISTRADOR |
+| POST, PUT | `/api/produtos`, `/api/produtos/{id}` | GERENTE, ADMINISTRADOR |
+| DELETE | `/api/produtos/{id}` | GERENTE, ADMINISTRADOR (apaga se nunca vendido; senão desativa) |
+| PATCH | `/api/produtos/{id}/estoque` `{ quantidade }` | GERENTE, ADMINISTRADOR |
+| GET, POST | `/api/usuarios` | ADMINISTRADOR (cria Funcionario, Gerente ou Administrador) |
+| PATCH | `/api/usuarios/{id}/ativo` `{ ativo }` | ADMINISTRADOR |
+
+Códigos de erro: 400 validação, 401 não autenticado ou credenciais inválidas, 403 sem permissão,
+404 não encontrado, 422 regra de negócio. A permissão é sempre decidida por `Usuario.possuiPermissao(Acao)`.
+CORS liberado para `http://localhost:5173`.
+
 ## Organização
 
 ```text

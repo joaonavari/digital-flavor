@@ -20,3 +20,9 @@ spring:
 
 server:
   port: ${PORT:8080}
+
+app:
+  jwt:
+    # Obrigatorio em todo ambiente. Use no minimo 32 caracteres aleatorios.
+    segredo: ${JWT_SECRET:}
+    expiracao-horas: ${JWT_EXPIRACAO_HORAS:8}

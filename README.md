@@ -44,7 +44,10 @@ Pré-requisitos: Java 17, Maven e Docker.
 # 1. Subir o MySQL
 docker compose up -d
 
-# 2. Rodar a API (o Flyway cria as tabelas na primeira execução)
+# 2. Definir o segredo do JWT (obrigatório, no mínimo 32 caracteres)
+export JWT_SECRET="$(openssl rand -base64 48)"   # PowerShell: $env:JWT_SECRET = "..."
+
+# 3. Rodar a API (o Flyway cria as tabelas na primeira execução)
 cd src/backend
 mvn spring-boot:run
 
