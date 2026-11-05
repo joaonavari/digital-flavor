@@ -28,13 +28,31 @@ O projeto está alinhado ao **ODS 12 – Consumo e Produção Responsáveis**, c
 - Spring Boot
 
 ### Banco de Dados
-- PostgreSQL
+- MySQL
 
 ## Arquitetura
 
 Fluxo principal da aplicação:
 
-`Usuário -> React/TypeScript -> API REST -> Java/Spring Boot -> PostgreSQL`
+`Usuário -> React/TypeScript -> API REST -> Java/Spring Boot -> MySQL`
+
+## Como executar (back-end)
+
+Pré-requisitos: Java 17, Maven e Docker.
+
+```bash
+# 1. Subir o MySQL
+docker compose up -d
+
+# 2. Rodar a API (o Flyway cria as tabelas na primeira execução)
+cd src/backend
+mvn spring-boot:run
+
+# Testes
+mvn test
+```
+
+As credenciais padrão de desenvolvimento estão em `.env.example`.
 
 ## Requisitos do Sistema
 
@@ -101,7 +119,7 @@ digital-flavor/
 | 11/09/2026 | Criação e organização inicial do repositório GitHub | João |
 | 12/09 a 25/09 | Configuração e estruturação do front-end com React, Vite e TypeScript | Equipe |
 | 26/09 a 09/10 | Desenvolvimento da estrutura inicial do back-end com Java e Spring Boot | Equipe |
-| 10/10 a 23/10 | Estruturação e integração do banco PostgreSQL | Equipe |
+| 10/10 a 23/10 | Estruturação e integração do banco MySQL | Equipe |
 | 24/10 a 02/11 | Implementação das operações CRUD e regras de negócio | Equipe |
 | 03/11 a 08/11 | Integração entre front-end, back-end e banco de dados | Equipe |
 | 09/11 a 11/11 | Realização de testes e correção de problemas | Equipe |
@@ -114,4 +132,4 @@ A pasta `docs/` será utilizada para armazenar o PDF da AEP, o Diagrama de Class
 
 ## Banco de Dados
 
-A pasta `database/` será utilizada para armazenar os scripts SQL de criação e evolução do banco PostgreSQL.
+A pasta `database/` será utilizada para armazenar os scripts SQL de criação e evolução do banco MySQL.
