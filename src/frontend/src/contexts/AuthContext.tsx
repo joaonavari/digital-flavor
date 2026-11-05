@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { buscarUsuarioLogado, entrar as entrarApi } from "../api/auth";
 import { ErroApi, definirAoNaoAutorizado, lerToken, salvarToken } from "../api/http";
-import type { UsuarioLogado } from "../types";
+import type { RespostaLogin, UsuarioLogado } from "../types";
 import { AuthContexto, type EstadoAuth, type ValorAuth } from "./authContexto";
 
 const CHAVE_USUARIO = "df.usuario";
@@ -65,12 +65,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, [sair]);
 
-  const entrar = useCallback(async (email: string, senha: string) => {
-    const { token, usuario } = await entrarApi({ email: email.trim(), senha });
+  const iniciarSessao = useCallback(({ token, usuario }: RespostaLogin) => {
     salvarToken(token);
     salvarUsuario(usuario);
     setEstado({ status: "autenticado", usuario });
-    // O login devolve o básico; /me completa com telefone, matrícula e turma (sem travar a entrada).
+    // A resposta traz o básico; /me completa com telefone, matrícula e turma (sem travar a entrada).
     buscarUsuarioLogado()
       .then((completo) => {
         salvarUsuario(completo);
@@ -84,7 +83,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return usuario;
   }, []);
 
-  const valor = useMemo<ValorAuth>(() => ({ estado, entrar, sair }), [estado, entrar, sair]);
+  const entrar = useCallback(
+    async (email: string, senha: string) => iniciarSessao(await entrarApi({ email: email.trim(), senha })),
+    [iniciarSessao],
+  );
+
+  const valor = useMemo<ValorAuth>(
+    () => ({ estado, entrar, iniciarSessao, sair }),
+    [estado, entrar, iniciarSessao, sair],
+  );
 
   return <AuthContexto.Provider value={valor}>{children}</AuthContexto.Provider>;
 }

@@ -21,7 +21,7 @@ import {
 import estilos from "../Login/Login.module.css";
 
 export function Cadastro() {
-  const { entrar } = useAuth();
+  const { iniciarSessao } = useAuth();
   const formulario = useRef<HTMLFormElement>(null);
   const { valores, campo, validarTudo } = useFormulario(
     { nome: "", matricula: "", turma: "", telefone: "", email: "", senha: "" },
@@ -48,7 +48,7 @@ export function Cadastro() {
     setEnviando(true);
     try {
       const telefone = valores.telefone.replace(/\D/g, "");
-      await cadastrar({
+      const resposta = await cadastrar({
         nome: valores.nome.trim(),
         email: valores.email.trim(),
         senha: valores.senha,
@@ -56,8 +56,8 @@ export function Cadastro() {
         ...(valores.turma.trim() ? { turma: valores.turma.trim() } : {}),
         ...(telefone ? { telefone } : {}),
       });
-      // Conta criada: já entra e a rota pública leva para o cardápio.
-      await entrar(valores.email, valores.senha);
+      // O cadastro já devolve { token, usuario }: entra direto e a rota pública leva para o cardápio.
+      iniciarSessao(resposta);
       notificar.sucesso("Conta criada", "Tudo pronto para o seu primeiro pedido.");
     } catch (erro) {
       setEnviando(false);

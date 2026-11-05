@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import type { UsuarioLogado } from "../types";
+import type { RespostaLogin, UsuarioLogado } from "../types";
 
 export type EstadoAuth =
   | { status: "carregando"; usuario: null }
@@ -9,6 +9,8 @@ export type EstadoAuth =
 export interface ValorAuth {
   estado: EstadoAuth;
   entrar: (email: string, senha: string) => Promise<UsuarioLogado>;
+  /** Começa a sessão com uma resposta { token, usuario } (login ou cadastro). */
+  iniciarSessao: (resposta: RespostaLogin) => UsuarioLogado;
   sair: () => void;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Tipos que espelham os DTOs da API (contrato combinado com o back-end).
+ * Tipos que espelham os DTOs da API (docs: CONTRATO_API.md, combinado com o back-end).
  * Se o back mudar algum formato, ajuste aqui.
  */
 
@@ -8,6 +8,8 @@ export type TipoUsuario = "ALUNO" | "FUNCIONARIO" | "GERENTE" | "ADMINISTRADOR";
 export type StatusPedido = "RECEBIDO" | "EM_PREPARO" | "CANCELADO" | "PRONTO" | "ENTREGUE";
 
 export type MetodoPagamento = "PIX" | "CARTAO";
+
+export type StatusPagamento = "PENDENTE" | "RECUSADO" | "APROVADO" | "ESTORNADO";
 
 /**
  * Usuário retornado por /api/auth/login e /api/auth/me.
@@ -72,7 +74,7 @@ export interface ItemPedido {
 
 export interface Pagamento {
   metodo: MetodoPagamento;
-  status: string;
+  status: StatusPagamento;
   numeroMascarado?: string;
   codigoQr?: string;
 }
@@ -138,7 +140,7 @@ export type DadosNovoUsuario = BaseNovoUsuario &
   (
     | { tipo: "FUNCIONARIO"; matriculaFuncional: string; turno?: string }
     | { tipo: "GERENTE"; setor?: string }
-    | { tipo: "ADMINISTRADOR"; nivelAcesso?: string }
+    | { tipo: "ADMINISTRADOR"; nivelAcesso?: number }
   );
 
 /** Corpo de erro da API. */

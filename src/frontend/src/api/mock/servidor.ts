@@ -18,7 +18,7 @@ import type {
   UsuarioLogado,
 } from "../../types";
 import { ErroApi, type Metodo } from "../http";
-import { criarBancoInicial, type BancoMock, type UsuarioMock } from "./dados";
+import { criarBancoInicial, isoLocal, type BancoMock, type UsuarioMock } from "./dados";
 
 const CHAVE_BANCO = "df.mock.banco";
 const PREFIXO_TOKEN = "mock-token-";
@@ -111,12 +111,6 @@ function acharPedido(id: number): Pedido {
   return pedido;
 }
 
-function nomeCurto(usuario: UsuarioMock): string {
-  const [primeiro = "", ...resto] = usuario.nome.trim().split(/\s+/);
-  const inicial = resto.length > 0 ? ` ${resto[resto.length - 1]?.charAt(0)}.` : "";
-  return `${primeiro}${inicial}${usuario.turma ? ` · ${usuario.turma}` : ""}`;
-}
-
 function validarProduto(dados: DadosProduto): void {
   if (!dados.nome?.trim()) throw erro(400, "Informe o nome do produto.");
   if (!(typeof dados.preco === "number") || dados.preco <= 0) throw erro(400, "O preço precisa ser maior que zero.");
@@ -149,7 +143,7 @@ const rotas: Array<[Metodo, RegExp, Manipulador]> = [
   ["POST", /^\/api\/auth\/login$/, ({ corpo }) => {
     const { email, senha } = corpo as DadosLogin;
     const usuario = banco.usuarios.find((u) => u.email.toLowerCase() === email?.trim().toLowerCase());
-    if (!usuario || usuario.senha !== senha) throw erro(400, "E-mail ou senha incorretos.");
+    if (!usuario || usuario.senha !== senha) throw erro(401, "E-mail ou senha incorretos.");
     if (!usuario.ativo) throw erro(403, "Este usuário está desativado. Procure a cantina.");
     return { token: `${PREFIXO_TOKEN}${usuario.id}`, usuario: paraUsuarioLogado(usuario) };
   }],
@@ -158,7 +152,7 @@ const rotas: Array<[Metodo, RegExp, Manipulador]> = [
     if (!dados.nome?.trim() || !dados.email?.trim() || !dados.senha || !dados.matricula?.trim())
       throw erro(400, "Preencha nome, e-mail, senha e matrícula.");
     if (banco.usuarios.some((u) => u.email.toLowerCase() === dados.email.trim().toLowerCase()))
-      throw erro(400, "Já existe uma conta com este e-mail.");
+      throw erro(422, "Já existe uma conta com este e-mail.");
     const novo: UsuarioMock = {
       id: banco.proximoId.usuario++,
       nome: dados.nome.trim(),
@@ -171,7 +165,8 @@ const rotas: Array<[Metodo, RegExp, Manipulador]> = [
       turma: dados.turma || undefined,
     };
     banco.usuarios.push(novo);
-    return paraUsuarioLogado(novo);
+    // 201 { token, usuario }: já entra logado.
+    return { token: `${PREFIXO_TOKEN}${novo.id}`, usuario: paraUsuarioLogado(novo) };
   }],
   ["GET", /^\/api\/auth\/me$/, ({ token }) => paraMe(usuarioDoToken(token))],
 
@@ -185,7 +180,7 @@ const rotas: Array<[Metodo, RegExp, Manipulador]> = [
     return banco.produtos;
   }],
   ["GET", /^\/api\/produtos\/(\d+)$/, ({ token, params }) => {
-    usuarioDoToken(token);
+    exigirPerfil(usuarioDoToken(token), GESTAO);
     return acharProduto(Number(params[0]));
   }],
   ["POST", /^\/api\/produtos$/, ({ token, corpo }) => {
@@ -277,7 +272,7 @@ const rotas: Array<[Metodo, RegExp, Manipulador]> = [
     if (pagamento.metodo === "CARTAO") {
       const digitos = (pagamento.numeroCartao ?? "").replace(/\D/g, "");
       if (digitos.length < 13 || digitos.length > 19) throw erro(400, "Número do cartão inválido.");
-      numeroMascarado = `•••• ${digitos.slice(-4)}`;
+      numeroMascarado = `**** **** **** ${digitos.slice(-4)}`;
     }
 
     // RN02: baixa o estoque.
@@ -286,8 +281,8 @@ const rotas: Array<[Metodo, RegExp, Manipulador]> = [
     const id = banco.proximoId.pedido++;
     const pedido: Pedido = {
       id,
-      alunoNome: nomeCurto(aluno),
-      dataHora: new Date().toISOString(),
+      alunoNome: aluno.nome,
+      dataHora: isoLocal(new Date()),
       status: "RECEBIDO",
       total: arredondar(itens.reduce((s, { produto, quantidade }) => s + produto.preco * quantidade, 0)),
       itens: itens.map(({ produto, quantidade }) => ({
@@ -298,7 +293,7 @@ const rotas: Array<[Metodo, RegExp, Manipulador]> = [
         subtotal: arredondar(produto.preco * quantidade),
       })),
       pagamento: pagamento.metodo === "PIX"
-        ? { metodo: "PIX", status: "APROVADO", codigoQr: `00020126DIGITALFLAVOR${id}5204000053039865802BR` }
+        ? { metodo: "PIX", status: "APROVADO", codigoQr: `DIGITALFLAVOR-PIX|${id}|${Date.now()}` }
         : { metodo: "CARTAO", status: "APROVADO", numeroMascarado },
     };
     banco.pedidos.push(pedido);
@@ -386,8 +381,11 @@ const rotas: Array<[Metodo, RegExp, Manipulador]> = [
     if (!["FUNCIONARIO", "GERENTE", "ADMINISTRADOR"].includes(dados.tipo)) throw erro(400, "Perfil inválido.");
     if (dados.tipo === "FUNCIONARIO" && !dados.matriculaFuncional?.trim())
       throw erro(400, "Informe a matrícula funcional do funcionário.");
+    if (dados.tipo === "ADMINISTRADOR" && dados.nivelAcesso !== undefined &&
+      (!Number.isInteger(dados.nivelAcesso) || dados.nivelAcesso < 1 || dados.nivelAcesso > 10))
+      throw erro(400, "O nível de acesso precisa ser um número inteiro de 1 a 10.");
     if (banco.usuarios.some((u) => u.email.toLowerCase() === dados.email.trim().toLowerCase()))
-      throw erro(400, "Já existe uma conta com este e-mail.");
+      throw erro(422, "Já existe uma conta com este e-mail.");
     const novo: UsuarioMock = {
       id: banco.proximoId.usuario++,
       nome: dados.nome.trim(),
@@ -398,7 +396,7 @@ const rotas: Array<[Metodo, RegExp, Manipulador]> = [
       telefone: dados.telefone || undefined,
       ...(dados.tipo === "FUNCIONARIO" ? { matriculaFuncional: dados.matriculaFuncional.trim(), turno: dados.turno } : {}),
       ...(dados.tipo === "GERENTE" ? { setor: dados.setor } : {}),
-      ...(dados.tipo === "ADMINISTRADOR" ? { nivelAcesso: dados.nivelAcesso } : {}),
+      ...(dados.tipo === "ADMINISTRADOR" ? { nivelAcesso: dados.nivelAcesso ?? 1 } : {}),
     };
     banco.usuarios.push(novo);
     return paraUsuario(novo);

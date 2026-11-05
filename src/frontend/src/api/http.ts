@@ -43,6 +43,13 @@ export function salvarToken(token: string | null): void {
 
 let aoNaoAutorizado: () => void = () => {};
 
+/**
+ * Rotas públicas: nelas o 401 é "e-mail ou senha incorretos" (contrato, seção 2),
+ * não sessão expirada. A mensagem vai para o formulário e a sessão não é tocada.
+ */
+const ROTAS_PUBLICAS = ["/api/auth/login", "/api/auth/cadastro"];
+const ehRotaPublica = (caminho: string) => ROTAS_PUBLICAS.includes(caminho.split("?")[0] ?? "");
+
 /** O AuthContext registra aqui o que fazer quando a API responde 401. */
 export function definirAoNaoAutorizado(acao: () => void): void {
   aoNaoAutorizado = acao;
@@ -83,7 +90,7 @@ export async function requisicao<T>(metodo: Metodo, caminho: string, corpo?: unk
     try {
       return (await requisicaoMock(metodo, caminho, corpo, token)) as T;
     } catch (erro) {
-      if (erro instanceof ErroApi && erro.status === 401) {
+      if (erro instanceof ErroApi && erro.status === 401 && !ehRotaPublica(caminho)) {
         salvarToken(null);
         aoNaoAutorizado();
       }
@@ -106,12 +113,6 @@ export async function requisicao<T>(metodo: Metodo, caminho: string, corpo?: unk
     throw new ErroApi(0, "Sem conexão com o servidor. Verifique sua internet e tente de novo.");
   }
 
-  if (resposta.status === 401) {
-    salvarToken(null);
-    aoNaoAutorizado();
-    throw new ErroApi(401, "Sua sessão expirou. Entre de novo.");
-  }
-
   const texto = await resposta.text();
   let dados: unknown = null;
   if (texto) {
@@ -120,6 +121,15 @@ export async function requisicao<T>(metodo: Metodo, caminho: string, corpo?: unk
     } catch {
       dados = null;
     }
+  }
+
+  if (resposta.status === 401) {
+    if (ehRotaPublica(caminho)) {
+      throw new ErroApi(401, ehErroResposta(dados) ? dados.mensagem : "E-mail ou senha incorretos.");
+    }
+    salvarToken(null);
+    aoNaoAutorizado();
+    throw new ErroApi(401, "Sua sessão expirou. Entre de novo.");
   }
 
   if (!resposta.ok) {

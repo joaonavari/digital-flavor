@@ -22,8 +22,10 @@ import estilos from "./Usuarios.module.css";
 
 type TipoEquipe = DadosNovoUsuario["tipo"];
 
-/** Limites dos campos extras por tipo (alinhar com o schema do back). */
-const LIMITES_EXTRAS = { matriculaFuncional: 20, turno: 20, setor: 60, nivelAcesso: 30 } as const;
+/** Limites dos campos extras por tipo (iguais ao banco). nivelAcesso é INT de 1 a 10. */
+const LIMITES_EXTRAS = { matriculaFuncional: 20, turno: 20, setor: 60 } as const;
+const NIVEL_MIN = 1;
+const NIVEL_MAX = 10;
 
 const TIPOS: Array<{ valor: TipoEquipe; rotulo: string }> = [
   { valor: "FUNCIONARIO", rotulo: "Funcionário" },
@@ -110,7 +112,7 @@ function Formulario({
   const formulario = useRef<HTMLFormElement>(null);
   const [tipo, setTipo] = useState<TipoEquipe>("FUNCIONARIO");
   const { valores, campo, validarTudo, sujo } = useFormulario(
-    { nome: "", email: "", senha: "", telefone: "", matriculaFuncional: "", turno: "", setor: "", nivelAcesso: "" },
+    { nome: "", email: "", senha: "", telefone: "", matriculaFuncional: "", turno: "", setor: "", nivelAcesso: String(NIVEL_MIN) },
     {
       nome: validarNome,
       email: validarEmail,
@@ -118,8 +120,15 @@ function Formulario({
       telefone: validarTelefone,
       // Só é obrigatória quando o tipo é funcionário.
       matriculaFuncional: (v) => (tipo === "FUNCIONARIO" && !v.trim() ? "Informe a matrícula funcional." : null),
+      nivelAcesso: (v) => {
+        if (tipo !== "ADMINISTRADOR") return null;
+        const n = Number(v);
+        return /^\d+$/.test(v) && n >= NIVEL_MIN && n <= NIVEL_MAX
+          ? null
+          : `Use um número inteiro de ${NIVEL_MIN} a ${NIVEL_MAX}.`;
+      },
     },
-    { telefone: mascararTelefone },
+    { telefone: mascararTelefone, nivelAcesso: (v) => v.replace(/\D/g, "").slice(0, 2) },
   );
   const [erroGeral, setErroGeral] = useState<string | null>(null);
 
@@ -150,7 +159,7 @@ function Formulario({
         ? { ...base, tipo, matriculaFuncional: valores.matriculaFuncional.trim(), turno: opcional(valores.turno) }
         : tipo === "GERENTE"
           ? { ...base, tipo, setor: opcional(valores.setor) }
-          : { ...base, tipo, nivelAcesso: opcional(valores.nivelAcesso) };
+          : { ...base, tipo, nivelAcesso: Number(valores.nivelAcesso) }; // número no JSON, não texto
 
     setEnviando(true);
     try {
@@ -229,9 +238,13 @@ function Formulario({
       )}
       {tipo === "ADMINISTRADOR" && (
         <TextField
-          rotulo="Nível de acesso (opcional)"
-          autoComplete="off"
-          maxLength={LIMITES_EXTRAS.nivelAcesso}
+          rotulo="Nível de acesso"
+          type="number"
+          inputMode="numeric"
+          min={NIVEL_MIN}
+          max={NIVEL_MAX}
+          step={1}
+          dica={`Número de ${NIVEL_MIN} a ${NIVEL_MAX} (padrão ${NIVEL_MIN}).`}
           {...campo("nivelAcesso")}
         />
       )}

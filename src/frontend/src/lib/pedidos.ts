@@ -1,4 +1,4 @@
-import type { Pagamento, StatusPedido } from "../types";
+import type { Pagamento, StatusPagamento, StatusPedido } from "../types";
 
 export const NOME_STATUS: Record<StatusPedido, string> = {
   RECEBIDO: "Recebido",
@@ -12,7 +12,7 @@ export const NOME_STATUS: Record<StatusPedido, string> = {
 export const emAndamento = (status: StatusPedido) =>
   status === "RECEBIDO" || status === "EM_PREPARO" || status === "PRONTO";
 
-const NOME_STATUS_PAGAMENTO: Record<string, string> = {
+const NOME_STATUS_PAGAMENTO: Record<StatusPagamento, string> = {
   APROVADO: "Aprovado",
   PENDENTE: "Pendente",
   RECUSADO: "Recusado",
@@ -21,15 +21,17 @@ const NOME_STATUS_PAGAMENTO: Record<string, string> = {
 
 /** O contrato não fixa os valores de pagamento.status: traduz os conhecidos e mostra o resto como veio. */
 export function nomeStatusPagamento(status: string): string {
-  const conhecido = NOME_STATUS_PAGAMENTO[status.toUpperCase()];
+  const conhecido = (NOME_STATUS_PAGAMENTO as Record<string, string | undefined>)[status.toUpperCase()];
   if (conhecido) return conhecido;
   const texto = status.replace(/_/g, " ").toLowerCase();
   return texto.charAt(0).toUpperCase() + texto.slice(1);
 }
 
+/** O back guarda "**** **** **** 1234"; na tela mostramos só "Cartão •••• 1234". */
 export function descricaoPagamento(pagamento: Pagamento): string {
   if (pagamento.metodo === "PIX") return "PIX";
-  return pagamento.numeroMascarado ? `Cartão ${pagamento.numeroMascarado}` : "Cartão";
+  const finais = pagamento.numeroMascarado?.match(/(\d{4})\s*$/)?.[1];
+  return finais ? `Cartão •••• ${finais}` : "Cartão";
 }
 
 const hora = new Intl.DateTimeFormat("pt-BR", { hour: "2-digit", minute: "2-digit" });
