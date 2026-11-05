@@ -1,0 +1,106 @@
+.controle {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--quantidade), minmax(0, 1fr));
+  padding: 3px;
+  border-radius: var(--radius-pill);
+  background: var(--fill);
+}
+
+/* Destaque que desliza até a opção escolhida. */
+.destaque {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  width: calc((100% - 6px) / var(--quantidade));
+  border-radius: var(--radius-pill);
+  background: var(--thumb);
+  box-shadow: var(--shadow-thumb);
+  transition: transform var(--duration-segment) var(--ease-drawer);
+  pointer-events: none;
+}
+
+.opcao {
+  position: relative;
+  min-width: 0;
+  padding: 0 8px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text);
+  font-weight: 500;
+  white-space: nowrap;
+  transition: transform var(--duration-press) var(--ease-out);
+}
+
+.opcao:active {
+  transform: scale(0.97);
+}
+
+/* O texto selecionado fica em 600 sem empurrar os vizinhos:
+   reservamos a largura do negrito com um pseudo-elemento invisível. */
+.rotulo {
+  display: inline-grid;
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+.rotulo > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rotulo::after {
+  content: attr(data-texto);
+  height: 0;
+  visibility: hidden;
+  overflow: hidden;
+  font-weight: 600;
+}
+
+.rotulo > span,
+.rotulo::after {
+  grid-area: 1 / 1;
+}
+
+.selecionada {
+  font-weight: 600;
+}
+
+.grande .opcao {
+  min-height: 40px;
+  font-size: 15px;
+}
+
+.medio .opcao {
+  min-height: 38px;
+  font-size: 14px;
+}
+
+.pequeno .opcao {
+  min-height: 32px;
+  font-size: 13px;
+}
+
+/* Toque confortável no celular. */
+@media (pointer: coarse) {
+  .grande .opcao,
+  .medio .opcao {
+    min-height: 40px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .destaque {
+    transition: none;
+  }
+  .opcao {
+    transition: none;
+  }
+  .opcao:active {
+    transform: none;
+  }
+}

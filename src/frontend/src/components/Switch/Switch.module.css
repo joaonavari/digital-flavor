@@ -1,0 +1,64 @@
+.switch {
+  position: relative;
+  flex-shrink: 0;
+  width: 46px;
+  height: 28px;
+  padding: 2px;
+  border: none;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  background: var(--switch-off);
+  transition: background-color 200ms ease;
+}
+
+/* Área de toque de 44px em volta do trilho. */
+.switch::after {
+  content: "";
+  position: absolute;
+  inset: -8px -2px;
+}
+
+.switch[aria-checked="true"] {
+  background: var(--switch-on);
+}
+
+.switch:disabled {
+  opacity: 0.45;
+}
+
+.botao {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-pill);
+  background: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 1px rgba(0, 0, 0, 0.15);
+  transition: transform var(--duration-switch) var(--ease-drawer);
+}
+
+.switch[aria-checked="true"] .botao {
+  transform: translateX(18px);
+}
+
+/* Ao pressionar, o botão se estica um pouco, como no iOS. Só transform. */
+.switch:active:not(:disabled) .botao {
+  transform: scaleX(1.15);
+  transform-origin: left center;
+}
+
+.switch[aria-checked="true"]:active:not(:disabled) .botao {
+  transform: translateX(18px) scaleX(1.15);
+  transform-origin: right center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .botao {
+    transition: none;
+  }
+  .switch:active:not(:disabled) .botao {
+    transform: none;
+  }
+  .switch[aria-checked="true"]:active:not(:disabled) .botao {
+    transform: translateX(18px);
+  }
+}

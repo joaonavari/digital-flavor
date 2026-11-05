@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Fila de pedidos</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#0066CC}a:hover{color:#004C99}
+.press{transition:transform 160ms cubic-bezier(0.23,1,0.32,1)}
+.press:active{transform:scale(0.97)}
+button{font:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="min-height: 800px; display: flex; flex-wrap: wrap; background: {{t.bg}}; color: {{t.text}}; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, 'Segoe UI', Roboto, sans-serif;">
+
+  <nav aria-label="Painel da cantina" style="flex: 1 1 220px; max-width: 240px; min-width: 200px; box-sizing: border-box; padding: 24px 12px; display: flex; flex-direction: column; gap: 4px; background: {{t.side}}; border-right: 0.5px solid {{t.sep}};">
+    <div style="padding: 0 10px 18px 10px; display: flex; flex-direction: column; gap: 2px;">
+      <span style="font-size: 17px; font-weight: 700; letter-spacing: -0.01em;">Digital Flavor</span>
+      <span style="font-size: 13px; color: {{t.sub}};">Cantina · Funcionário</span>
+    </div>
+    <a href="#" aria-current="page" style="min-height: 36px; padding: 0 10px; border-radius: 10px; display: flex; align-items: center; gap: 10px; text-decoration: none; font-size: 14px; font-weight: 600; background: {{accent}}; color: {{onAccent}};">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h12v17l-3-2-3 2-3-2-3 2z"></path><path d="M9 8.5h6M9 12.5h6"></path></svg>
+      Fila de pedidos
+    </a>
+    <a href="Produtos.dc.html" style="min-height: 36px; padding: 0 10px; border-radius: 10px; display: flex; align-items: center; gap: 10px; text-decoration: none; font-size: 14px; font-weight: 500; color: {{t.text}};">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7.5L12 3l8.5 4.5v9L12 21l-8.5-4.5z"></path><path d="M3.5 7.5L12 12l8.5-4.5M12 12v9"></path></svg>
+      Produtos e estoque
+    </a>
+    <a href="#" style="min-height: 36px; padding: 0 10px; border-radius: 10px; display: flex; align-items: center; gap: 10px; text-decoration: none; font-size: 14px; font-weight: 500; color: {{t.text}};">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"></path></svg>
+      Vendas
+    </a>
+    <a href="#" style="min-height: 36px; padding: 0 10px; border-radius: 10px; display: flex; align-items: center; gap: 10px; text-decoration: none; font-size: 14px; font-weight: 500; color: {{t.text}};">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20c.9-3.3 3.4-5 6.5-5s5.6 1.7 6.5 5"></path><path d="M16 4.5a3.5 3.5 0 010 7M18.5 15.5c1.5.8 2.5 2.4 3 4.5"></path></svg>
+      Usuários
+    </a>
+  </nav>
+
+  <main style="flex: 999 1 560px; min-width: 0; box-sizing: border-box; padding: 28px 28px 40px 28px; display: flex; flex-direction: column; gap: 22px;">
+    <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px;">
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <h1 style="margin: 0; font-size: 28px; line-height: 1.15; font-weight: 700; letter-spacing: -0.02em;">Fila de pedidos</h1>
+        <span style="font-size: 14px; color: {{t.sub}};">Atualiza sozinha · {{entregues}} entregues hoje</span>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; align-items: start;">
+      <sc-for list="{{colunas}}" as="col" hint-placeholder-count="3">
+        <section aria-label="{{col.titulo}}" style="border-radius: 18px; padding: 12px; background: {{t.col}}; display: flex; flex-direction: column; gap: 10px;">
+          <div style="padding: 4px 6px 2px 6px; display: flex; align-items: center; justify-content: space-between;">
+            <span style="display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700;">
+              <span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 999px; background: {{col.ponto}};"></span>
+              {{col.titulo}}
+            </span>
+            <span style="min-width: 24px; height: 22px; padding: 0 7px; box-sizing: border-box; border-radius: 999px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: {{t.card}}; color: {{t.sub}};">{{col.qtd}}</span>
+          </div>
+          <sc-if value="{{col.vazia}}" hint-placeholder-val="{{false}}">
+            <div style="padding: 22px 8px; text-align: center; font-size: 13px; color: {{t.sub}};">Nenhum pedido aqui</div>
+          </sc-if>
+          <sc-for list="{{col.cards}}" as="p" hint-placeholder-count="2">
+            <article style="border-radius: 14px; padding: 14px; background: {{t.card}}; box-shadow: 0 1px 2px rgba(0,0,0,0.06); display: flex; flex-direction: column; gap: 10px;">
+              <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                <span style="font-size: 17px; font-weight: 700; letter-spacing: -0.01em;">#{{p.numero}}</span>
+                <span style="font-size: 13px; color: {{t.sub}};">{{p.tempo}}</span>
+              </div>
+              <span style="font-size: 14px; font-weight: 600;">{{p.aluno}}</span>
+              <div style="display: flex; flex-direction: column; gap: 3px;">
+                <sc-for list="{{p.itens}}" as="i" hint-placeholder-count="2">
+                  <span style="font-size: 14px; color: {{t.sub}};">{{i}}</span>
+                </sc-for>
+              </div>
+              <button class="press" onClick="{{p.avancar}}" style="min-height: 38px; border: none; border-radius: 999px; font-size: 14px; font-weight: 600; background: {{col.btnBg}}; color: {{col.btnFg}};">{{col.acao}}</button>
+            </article>
+          </sc-for>
+        </section>
+      </sc-for>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"enum","options":["Verde","Laranja","Azul"],"default":"Azul"},"dark":{"editor":"boolean","default":false},"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      entregues: 12,
+      pedidos: [
+        { numero: 108, aluno: 'Maria S. · 3º A', itens: ['2× Coxinha de frango', '1× Suco de laranja'], tempo: 'agora', status: 'RECEBIDO' },
+        { numero: 107, aluno: 'Pedro A. · 2º B', itens: ['1× Pão de queijo', '1× Água mineral'], tempo: 'há 1 min', status: 'RECEBIDO' },
+        { numero: 106, aluno: 'Júlia R. · 1º C', itens: ['1× Esfiha de carne'], tempo: 'há 3 min', status: 'EM_PREPARO' },
+        { numero: 105, aluno: 'Lucas M. · 3º A', itens: ['1× Brownie', '1× Suco de laranja'], tempo: 'há 4 min', status: 'EM_PREPARO' },
+        { numero: 104, aluno: 'Ana P. · 2º A', itens: ['3× Pão de queijo'], tempo: 'há 6 min', status: 'PRONTO' }
+      ]
+    };
+  }
+  renderVals() {
+    var dark = this.props.dark ?? false;
+    var nomeCor = this.props.accent ?? 'Azul';
+    var cores = { Verde: ['#1F7A35', '#30D158'], Laranja: ['#C93400', '#FF9F0A'], Azul: ['#0066CC', '#0A84FF'] };
+    var par = cores[nomeCor] || cores.Azul;
+    var accent = dark ? par[1] : par[0];
+    var onAccent = dark ? '#000000' : '#FFFFFF';
+    var t = dark
+      ? { bg: '#1C1C1E', side: '#232325', col: '#2C2C2E', card: '#3A3A3C', text: '#F5F5F7', sub: '#A1A1A6', sep: 'rgba(84,84,88,0.65)', neutro: '#48484A' }
+      : { bg: '#FFFFFF', side: '#F5F5F7', col: '#F2F2F7', card: '#FFFFFF', text: '#1C1C1E', sub: '#6E6E73', sep: 'rgba(60,60,67,0.2)', neutro: '#E3E3E8' };
+    var self = this;
+    var proximo = { RECEBIDO: 'EM_PREPARO', EM_PREPARO: 'PRONTO', PRONTO: 'ENTREGUE' };
+    function avancar(numero) {
+      var entregou = 0;
+      var lista = self.state.pedidos.map(function (p) {
+        if (p.numero !== numero) return p;
+        var novo = proximo[p.status];
+        if (novo === 'ENTREGUE') entregou = 1;
+        return Object.assign({}, p, { status: novo });
+      }).filter(function (p) { return p.status !== 'ENTREGUE'; });
+      self.setState({ pedidos: lista, entregues: self.state.entregues + entregou });
+    }
+    var defs = [
+      { status: 'RECEBIDO', titulo: 'Recebidos', acao: 'Iniciar preparo', ponto: t.sub, btnBg: t.neutro, btnFg: t.text },
+      { status: 'EM_PREPARO', titulo: 'Em preparo', acao: 'Marcar como pronto', ponto: accent, btnBg: accent, btnFg: onAccent },
+      { status: 'PRONTO', titulo: 'Prontos para retirar', acao: 'Entregar', ponto: dark ? '#30D158' : '#1F7A35', btnBg: dark ? '#30D158' : '#1F7A35', btnFg: onAccent }
+    ];
+    var colunas = defs.map(function (d) {
+      var cards = self.state.pedidos.filter(function (p) { return p.status === d.status; }).map(function (p) {
+        return Object.assign({}, p, { avancar: function () { avancar(p.numero); } });
+      });
+      return Object.assign({}, d, { cards: cards, qtd: cards.length, vazia: cards.length === 0 });
+    });
+    return { t: t, accent: accent, onAccent: onAccent, colunas: colunas, entregues: this.state.entregues };
+  }
+}
+</script>
+</body>
+</html>

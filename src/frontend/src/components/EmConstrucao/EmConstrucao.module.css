@@ -1,0 +1,48 @@
+.cabecalho {
+  padding: 60px 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cabecalhoPainel {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.saudacao {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.tituloGrande {
+  font: var(--text-large-title);
+  letter-spacing: var(--tracking-title);
+  overflow-wrap: anywhere;
+}
+
+.tituloPainel {
+  font-size: 28px;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: var(--tracking-title);
+}
+
+.aviso {
+  margin: 16px;
+  padding: 16px;
+  border-radius: var(--radius-group);
+  background: var(--card);
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+
+.avisoPainel {
+  padding: 16px;
+  border-radius: var(--radius-panel-card);
+  background: var(--column);
+  font-size: 15px;
+  color: var(--text-secondary);
+}

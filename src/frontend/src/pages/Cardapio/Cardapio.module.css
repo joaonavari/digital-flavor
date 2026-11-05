@@ -1,0 +1,259 @@
+.cabecalho {
+  padding: max(env(safe-area-inset-top), 60px) 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.saudacao {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.titulo {
+  font: var(--text-large-title);
+  letter-spacing: var(--tracking-title);
+}
+
+.categorias {
+  padding: 16px 16px 4px;
+}
+
+/* Espaço extra no fim para a barra "Ver carrinho" não cobrir o último produto. */
+.lista {
+  container: lista / inline-size;
+  margin: 0;
+  padding: 12px 16px 96px;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.produto {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px;
+  border-radius: var(--radius-card);
+  background: var(--card);
+}
+
+/*
+ * Entrada em cascata só na primeira carga: as linhas sobem 8px enquanto aparecem.
+ * Intervalos que diminuem (0, 50, 90, 120...) leem como uma onda, não como uma fila.
+ */
+.entrada {
+  animation: surgir 300ms var(--ease-out) both;
+  animation-delay: var(--atraso);
+}
+
+@keyframes surgir {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/*
+ * Lista estreita (celular de 320px): com o stepper aberto, ele desce para uma linha própria
+ * abaixo do texto, para o nome do produto não ficar espremido.
+ */
+@container lista (max-width: 330px) {
+  .comStepper {
+    flex-wrap: wrap;
+    row-gap: 10px;
+  }
+  .comStepper .texto {
+    flex-basis: calc(100% - 78px);
+  }
+  .comStepper .acao {
+    flex-basis: 100%;
+  }
+}
+
+.texto {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nome {
+  font-size: 17px;
+  line-height: 1.25;
+  font-weight: 600;
+  letter-spacing: var(--tracking-headline);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+.descricao {
+  font-size: 13px;
+  line-height: 1.3;
+  color: var(--text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+.linhaPreco {
+  margin-top: 2px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+}
+
+.preco {
+  font-size: 15px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.ultimas {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--warning-fg);
+  white-space: nowrap;
+}
+
+.acao {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Troca "+" ↔ stepper: aparece no lugar, com um leve crescimento. */
+.troca {
+  animation: trocar 160ms var(--ease-out);
+}
+
+@keyframes trocar {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+
+.esqueleto {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px;
+  border-radius: var(--radius-card);
+  background: var(--card);
+}
+
+.esqueletoTexto {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.estado {
+  margin: 12px 16px;
+  border-radius: var(--radius-card);
+  background: var(--card);
+}
+
+/* Barra flutuante "Ver carrinho". */
+.barra {
+  width: 100%;
+  min-height: 56px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: var(--shadow-float);
+  font-size: 16px;
+  font-weight: 600;
+  transition: transform var(--duration-press) var(--ease-out);
+}
+
+.barra:active {
+  transform: scale(0.97);
+}
+
+.barraEsquerda {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.contador {
+  min-width: 26px;
+  height: 26px;
+  padding: 0 7px;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  background: color-mix(in srgb, var(--on-accent) 22%, transparent);
+}
+
+.textoCurto {
+  display: none;
+}
+
+/* Tela pequena: "Carrinho" no lugar de "Ver carrinho" para o total caber numa linha. */
+@media (max-width: 359px) {
+  .textoLongo {
+    display: none;
+  }
+  .textoCurto {
+    display: inline;
+  }
+}
+
+.barraEsquerda > span:last-child {
+  white-space: nowrap;
+}
+
+.barraTotal {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entrada {
+    animation: aparecer 200ms ease both;
+    animation-delay: 0ms;
+  }
+  .troca {
+    animation: none;
+  }
+  .barra {
+    transition: none;
+  }
+  .barra:active {
+    transform: none;
+    opacity: 0.85;
+  }
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+  }
+}

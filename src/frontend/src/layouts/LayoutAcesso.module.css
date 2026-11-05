@@ -1,0 +1,47 @@
+.tela {
+  max-width: var(--app-max-width);
+  min-height: 100dvh;
+  margin-inline: auto;
+  padding: max(env(safe-area-inset-top), 56px) 16px max(env(safe-area-inset-bottom), 32px);
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.cabecalho {
+  padding: 0 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Ícone do app: o único toque de marca nas telas de acesso. */
+.marca {
+  width: 56px;
+  height: 56px;
+  margin-bottom: 14px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+.titulo {
+  font: var(--text-large-title);
+  letter-spacing: var(--tracking-title);
+}
+
+.subtitulo {
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--text-secondary);
+}
+
+.conteudo {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}

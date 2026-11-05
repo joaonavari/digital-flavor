@@ -1,0 +1,131 @@
+.raiz {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+}
+
+.saindo {
+  pointer-events: none;
+}
+
+.fundo {
+  position: absolute;
+  inset: 0;
+  background: var(--scrim);
+}
+
+.painel {
+  /* Dentro da folha os cards ficam um tom acima do fundo (cores "elevadas" do iOS). */
+  --card: var(--sheet-card);
+  --fill: var(--sheet-fill);
+
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background: var(--sheet-bg);
+  color: var(--text);
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.25);
+  outline: none;
+  will-change: transform;
+}
+
+/* O foco vai para a folha só para o leitor de tela começar nela; sem anel no painel inteiro. */
+.painel:focus-visible {
+  outline: none;
+}
+
+/* Celular: sobe de baixo. */
+.inferior {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-width: var(--app-max-width);
+  max-height: calc(100dvh - max(env(safe-area-inset-top), 12px) - 46px);
+  margin-inline: auto;
+  border-radius: var(--radius-sheet) var(--radius-sheet) 0 0;
+}
+
+/* Cobre o vão quando a folha é puxada para cima além do limite. */
+.inferior::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: var(--sheet-bg);
+}
+
+/* Computador: painel lateral flutuante. */
+.lateral {
+  top: 12px;
+  right: 12px;
+  bottom: 12px;
+  width: min(var(--largura-lateral, 440px), calc(100vw - 24px));
+  border-radius: var(--radius-sheet);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25), 0 0 0 0.5px var(--separator);
+}
+
+.cabecalho {
+  flex-shrink: 0;
+  padding: 0 20px 8px;
+}
+
+/* A área do título é a alça de arrastar no celular. */
+.inferior .cabecalho {
+  touch-action: none;
+  cursor: grab;
+}
+
+.inferior .cabecalho:active {
+  cursor: grabbing;
+}
+
+.alca {
+  width: 36px;
+  height: 5px;
+  margin: 8px auto 0;
+  border-radius: var(--radius-pill);
+  background: var(--grabber);
+}
+
+.linhaTitulo {
+  padding-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.lateral .linhaTitulo {
+  padding-top: 20px;
+}
+
+.titulo {
+  min-width: 0;
+  font: var(--text-sheet-title);
+  letter-spacing: var(--tracking-title);
+  overflow-wrap: anywhere;
+}
+
+.corpo {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 8px 16px 24px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.rodape {
+  flex-shrink: 0;
+  padding: 14px 16px max(env(safe-area-inset-bottom), 20px);
+  border-top: 0.5px solid var(--separator);
+  background: var(--bar);
+  -webkit-backdrop-filter: var(--material-blur);
+  backdrop-filter: var(--material-blur);
+}
+
+.lateral .rodape {
+  padding-bottom: 16px;
+  border-radius: 0 0 var(--radius-sheet) var(--radius-sheet);
+}

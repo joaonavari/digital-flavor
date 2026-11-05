@@ -1,0 +1,109 @@
+.itens {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-radius: var(--radius-group);
+  background: var(--card);
+  overflow: hidden;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+}
+
+.item + .item {
+  border-top: 0.5px solid var(--separator);
+}
+
+.itemTexto {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.itemNome {
+  font-size: 17px;
+  line-height: 1.25;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.itemUnitario {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.itemSubtotal {
+  flex-shrink: 0;
+  min-width: 68px;
+  text-align: right;
+  font-size: 15px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Celular estreito: o subtotal desce para baixo do nome em vez de espremer o stepper. */
+@media (max-width: 360px) {
+  .item {
+    flex-wrap: wrap;
+  }
+  .itemTexto {
+    flex-basis: calc(100% - 120px);
+  }
+  .itemSubtotal {
+    order: 3;
+    flex-basis: 100%;
+    text-align: left;
+    min-width: 0;
+  }
+}
+
+.pagamento {
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pagamento > :global(.section-label) {
+  padding-left: 4px;
+}
+
+.nota {
+  padding-left: 4px;
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--text-secondary);
+}
+
+.campoCartao {
+  margin-top: 6px;
+}
+
+.total {
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.totalRotulo {
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+
+.totalValor {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: var(--tracking-headline);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}

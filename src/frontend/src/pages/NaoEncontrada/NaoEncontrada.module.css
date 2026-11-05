@@ -1,0 +1,38 @@
+.tela {
+  max-width: var(--app-max-width);
+  min-height: 100dvh;
+  margin-inline: auto;
+  padding: 60px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.titulo {
+  font: var(--text-large-title);
+  letter-spacing: var(--tracking-title);
+}
+
+.texto {
+  color: var(--text-secondary);
+}
+
+.link {
+  align-self: flex-start;
+  min-height: var(--tap);
+  margin-top: 8px;
+  padding: 0 22px;
+  border-radius: var(--radius-pill);
+  display: inline-flex;
+  align-items: center;
+  font-weight: 600;
+  text-decoration: none;
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .link:hover {
+    color: var(--on-accent);
+  }
+}
