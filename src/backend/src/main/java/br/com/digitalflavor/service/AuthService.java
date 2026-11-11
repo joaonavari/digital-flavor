@@ -27,9 +27,9 @@ public class AuthService {
         this.jwtService = jwtService;
     }
 
-    /** Cadastro publico: sempre cria um Aluno. */
+    /** Cadastro publico: sempre cria um Aluno, que ja sai logado (o front espera { token, usuario }). */
     @Transactional
-    public UsuarioResponse cadastrarAluno(CadastroAlunoRequest pedido) {
+    public LoginResponse cadastrarAluno(CadastroAlunoRequest pedido) {
         if (usuarios.existsByEmailIgnoreCase(pedido.email())) {
             throw new RegraNegocioException("Ja existe um usuario com este email.");
         }
@@ -40,7 +40,8 @@ public class AuthService {
                 pedido.telefone(),
                 pedido.matricula(),
                 pedido.turma());
-        return UsuarioResponse.de(usuarios.save(aluno));
+        Aluno salvo = usuarios.save(aluno);
+        return new LoginResponse(jwtService.gerarToken(salvo), UsuarioResponse.de(salvo));
     }
 
     /** Mensagem generica para email inexistente, senha errada ou usuario inativo. */

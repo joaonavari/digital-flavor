@@ -14,5 +14,6 @@ public record ProdutoRequest(
         String descricao,
         @NotNull @DecimalMin("0.00") BigDecimal preco,
         @Size(max = 60) String categoria,
-        @NotNull @Min(0) Integer quantidadeEstoque) {
+        @NotNull @Min(0) Integer quantidadeEstoque,
+        @Size(max = 500) String imagemUrl) {
 }

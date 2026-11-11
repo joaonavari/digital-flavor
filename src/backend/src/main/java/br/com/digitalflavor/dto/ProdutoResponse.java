@@ -11,7 +11,8 @@ public record ProdutoResponse(
         BigDecimal preco,
         String categoria,
         int quantidadeEstoque,
-        boolean ativo) {
+        boolean ativo,
+        String imagemUrl) {
 
     public static ProdutoResponse de(Produto produto) {
         return new ProdutoResponse(
@@ -21,6 +22,7 @@ public record ProdutoResponse(
                 produto.getPreco(),
                 produto.getCategoria(),
                 produto.getQuantidadeEstoque(),
-                produto.isAtivo());
+                produto.isAtivo(),
+                produto.getImagemUrl());
     }
 }
