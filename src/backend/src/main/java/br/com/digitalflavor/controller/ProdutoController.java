@@ -1,5 +1,6 @@
 package br.com.digitalflavor.controller;
 
+import br.com.digitalflavor.dto.AtivoRequest;
 import br.com.digitalflavor.dto.EstoqueRequest;
 import br.com.digitalflavor.dto.ProdutoAtualizacaoRequest;
 import br.com.digitalflavor.dto.ProdutoRequest;
@@ -7,6 +8,7 @@ import br.com.digitalflavor.dto.ProdutoResponse;
 import br.com.digitalflavor.service.ProdutoService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -57,9 +59,15 @@ public class ProdutoController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void excluir(@PathVariable Long id) {
-        produtoService.excluir(id);
+    public ResponseEntity<ProdutoResponse> excluir(@PathVariable Long id) {
+        return produtoService.excluir(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.noContent().build());
+    }
+
+    @PatchMapping("/{id}/ativo")
+    public ProdutoResponse definirAtivo(@PathVariable Long id, @Valid @RequestBody AtivoRequest pedido) {
+        return produtoService.definirAtivo(id, pedido.ativo());
     }
 
     @PatchMapping("/{id}/estoque")

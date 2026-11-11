@@ -30,7 +30,7 @@ public class AuthController {
 
     @PostMapping("/cadastro")
     @ResponseStatus(HttpStatus.CREATED)
-    public UsuarioResponse cadastrar(@Valid @RequestBody CadastroAlunoRequest pedido) {
+    public LoginResponse cadastrar(@Valid @RequestBody CadastroAlunoRequest pedido) {
         return authService.cadastrarAluno(pedido);
     }
 

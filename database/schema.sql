@@ -61,6 +61,7 @@ CREATE TABLE produto (
     categoria           VARCHAR(60)     NULL,
     quantidade_estoque  INT             NOT NULL DEFAULT 0,
     ativo               TINYINT(1)      NOT NULL DEFAULT 1,
+    imagem_url          VARCHAR(500)    NULL, -- V2__imagem_produto.sql
     PRIMARY KEY (id),
     CONSTRAINT ck_produto_preco CHECK (preco >= 0),
     CONSTRAINT ck_produto_estoque CHECK (quantidade_estoque >= 0)

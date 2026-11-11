@@ -36,6 +36,10 @@ public class Produto {
     @Column(nullable = false)
     private boolean ativo = true;
 
+    /** Foto opcional exibida no cardapio. */
+    @Column(name = "imagem_url", length = 500)
+    private String imagemUrl;
+
     protected Produto() {
     }
 
@@ -95,6 +99,14 @@ public class Produto {
 
     public void ativar() {
         this.ativo = true;
+    }
+
+    public void definirImagem(String imagemUrl) {
+        this.imagemUrl = imagemUrl == null || imagemUrl.isBlank() ? null : imagemUrl.trim();
+    }
+
+    public String getImagemUrl() {
+        return imagemUrl;
     }
 
     public Long getId() {

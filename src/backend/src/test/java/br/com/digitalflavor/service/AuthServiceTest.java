@@ -15,6 +15,7 @@ import org.mockito.ArgumentCaptor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Optional;
 
@@ -46,10 +47,15 @@ class AuthServiceTest {
     @Test
     void cadastroCriaAlunoComSenhaEmHash() {
         when(usuarios.existsByEmailIgnoreCase("ana@escola.br")).thenReturn(false);
-        when(usuarios.save(any(Usuario.class))).thenAnswer(chamada -> chamada.getArgument(0));
+        when(usuarios.save(any(Usuario.class))).thenAnswer(chamada -> {
+            Usuario novo = chamada.getArgument(0);
+            ReflectionTestUtils.setField(novo, "id", 1L);
+            return novo;
+        });
 
-        UsuarioResponse resposta = service.cadastrarAluno(new CadastroAlunoRequest(
+        LoginResponse login = service.cadastrarAluno(new CadastroAlunoRequest(
                 "Ana", "ana@escola.br", "senhaSegura1", null, "RA123", "3A"));
+        UsuarioResponse resposta = login.usuario();
 
         ArgumentCaptor<Usuario> salvo = ArgumentCaptor.forClass(Usuario.class);
         verify(usuarios).save(salvo.capture());
@@ -57,6 +63,8 @@ class AuthServiceTest {
         assertThat(salvo.getValue().getSenha()).isNotEqualTo("senhaSegura1");
         assertThat(encoder.matches("senhaSegura1", salvo.getValue().getSenha())).isTrue();
         assertThat(resposta.tipo()).isEqualTo("ALUNO");
+        assertThat(resposta.matricula()).isEqualTo("RA123");
+        assertThat(login.token()).isNotBlank();
     }
 
     @Test
