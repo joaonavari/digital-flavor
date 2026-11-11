@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: digital-flavor-api
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:digital_flavor}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Sao_Paulo
+    username: ${DB_USER:digital_flavor}
+    password: ${DB_PASSWORD:digital_flavor}
+  jpa:
+    # O schema e controlado pelo Flyway (src/main/resources/db/migration).
+    # O Hibernate nunca cria nem altera tabelas.
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+server:
+  port: ${PORT:8080}
+
+app:
+  jwt:
+    # Obrigatorio em todo ambiente. Use no minimo 32 caracteres aleatorios.
+    segredo: ${JWT_SECRET:}
+    expiracao-horas: ${JWT_EXPIRACAO_HORAS:8}
