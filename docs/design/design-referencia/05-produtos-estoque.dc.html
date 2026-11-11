@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Produtos e estoque</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#0066CC}a:hover{color:#004C99}
+.press{transition:transform 160ms cubic-bezier(0.23,1,0.32,1)}
+.press:active{transform:scale(0.97)}
+button{font:inherit;cursor:pointer}
+input{font:inherit}
+.slide{transition:transform 320ms cubic-bezier(0.32,0.72,0,1), background-color 200ms ease}
+@media (prefers-reduced-motion: reduce){.slide{transition:none !important}}
+</style>
+</helmet>
+<div style="min-height: 800px; display: flex; flex-wrap: wrap; background: {{t.bg}}; color: {{t.text}}; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, 'Segoe UI', Roboto, sans-serif;">
+
+  <nav aria-label="Painel da cantina" style="flex: 1 1 220px; max-width: 240px; min-width: 200px; box-sizing: border-box; padding: 24px 12px; display: flex; flex-direction: column; gap: 4px; background: {{t.side}}; border-right: 0.5px solid {{t.sep}};">
+    <div style="padding: 0 10px 18px 10px; display: flex; flex-direction: column; gap: 2px;">
+      <span style="font-size: 17px; font-weight: 700; letter-spacing: -0.01em;">Digital Flavor</span>
+      <span style="font-size: 13px; color: {{t.sub}};">Cantina · Gerente</span>
+    </div>
+    <a href="Fila.dc.html" style="min-height: 36px; padding: 0 10px; border-radius: 10px; display: flex; align-items: center; gap: 10px; text-decoration: none; font-size: 14px; font-weight: 500; color: {{t.text}};">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h12v17l-3-2-3 2-3-2-3 2z"></path><path d="M9 8.5h6M9 12.5h6"></path></svg>
+      Fila de pedidos
+    </a>
+    <a href="#" aria-current="page" style="min-height: 36px; padding: 0 10px; border-radius: 10px; display: flex; align-items: center; gap: 10px; text-decoration: none; font-size: 14px; font-weight: 600; background: {{accent}}; color: {{onAccent}};">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7.5L12 3l8.5 4.5v9L12 21l-8.5-4.5z"></path><path d="M3.5 7.5L12 12l8.5-4.5M12 12v9"></path></svg>
+      Produtos e estoque
+    </a>
+    <a href="#" style="min-height: 36px; padding: 0 10px; border-radius: 10px; display: flex; align-items: center; gap: 10px; text-decoration: none; font-size: 14px; font-weight: 500; color: {{t.text}};">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"></path></svg>
+      Vendas
+    </a>
+    <a href="#" style="min-height: 36px; padding: 0 10px; border-radius: 10px; display: flex; align-items: center; gap: 10px; text-decoration: none; font-size: 14px; font-weight: 500; color: {{t.text}};">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20c.9-3.3 3.4-5 6.5-5s5.6 1.7 6.5 5"></path><path d="M16 4.5a3.5 3.5 0 010 7M18.5 15.5c1.5.8 2.5 2.4 3 4.5"></path></svg>
+      Usuários
+    </a>
+  </nav>
+
+  <main style="flex: 999 1 560px; min-width: 0; box-sizing: border-box; padding: 28px 28px 40px 28px; display: flex; flex-direction: column; gap: 20px;">
+    <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px;">
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <h1 style="margin: 0; font-size: 28px; line-height: 1.15; font-weight: 700; letter-spacing: -0.02em;">Produtos e estoque</h1>
+        <span style="font-size: 14px; color: {{t.sub}};">{{resumo}}</span>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+        <label style="min-height: 38px; min-width: 220px; padding: 0 12px; box-sizing: border-box; border-radius: 999px; display: flex; align-items: center; gap: 8px; background: {{t.fill}}; color: {{t.sub}};">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="M20 20l-4-4"></path></svg>
+          <span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0);">Buscar produto</span>
+          <input type="search" placeholder="Buscar produto" onInput="{{buscar}}" style="flex-grow: 1; min-width: 0; border: none; outline: none; background: transparent; font-size: 14px; color: {{t.text}};">
+        </label>
+        <button class="press" style="min-height: 38px; padding: 0 18px; border: none; border-radius: 999px; display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; background: {{accent}}; color: {{onAccent}};">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+          Novo produto
+        </button>
+      </div>
+    </div>
+
+    <div style="overflow-x: auto; border-radius: 16px; background: {{t.card}}; border: 0.5px solid {{t.sep}};">
+      <table style="width: 100%; min-width: 760px; border-collapse: collapse; font-size: 14px;">
+        <thead>
+          <tr style="text-align: left; color: {{t.sub}};">
+            <th scope="col" style="padding: 12px 16px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; border-bottom: 0.5px solid {{t.sep}};">Produto</th>
+            <th scope="col" style="padding: 12px 16px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; border-bottom: 0.5px solid {{t.sep}};">Categoria</th>
+            <th scope="col" style="padding: 12px 16px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; border-bottom: 0.5px solid {{t.sep}}; text-align: right;">Preço</th>
+            <th scope="col" style="padding: 12px 16px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; border-bottom: 0.5px solid {{t.sep}};">Estoque</th>
+            <th scope="col" style="padding: 12px 16px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; border-bottom: 0.5px solid {{t.sep}};">No cardápio</th>
+            <th scope="col" style="padding: 12px 16px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; border-bottom: 0.5px solid {{t.sep}}; text-align: right;">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <sc-for list="{{lista}}" as="p" hint-placeholder-count="6">
+            <tr style="opacity: {{p.opacidade}};">
+              <td style="padding: 10px 16px; border-bottom: {{p.borda}};">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <div aria-hidden="true" style="width: 40px; height: 40px; flex-shrink: 0; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; background: {{tint}}; color: {{accent}};">{{p.inicial}}</div>
+                  <div style="display: flex; flex-direction: column; gap: 1px;">
+                    <span style="font-weight: 600;">{{p.nome}}</span>
+                    <span style="font-size: 13px; color: {{t.sub}};">{{p.desc}}</span>
+                  </div>
+                </div>
+              </td>
+              <td style="padding: 10px 16px; border-bottom: {{p.borda}}; color: {{t.sub}};">{{p.cat}}</td>
+              <td style="padding: 10px 16px; border-bottom: {{p.borda}}; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums;">{{p.precoFmt}}</td>
+              <td style="padding: 10px 16px; border-bottom: {{p.borda}};">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="min-width: 24px; font-weight: 600; font-variant-numeric: tabular-nums;">{{p.estoque}}</span>
+                  <sc-if value="{{p.temAviso}}" hint-placeholder-val="{{false}}">
+                    <span style="padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 600; background: {{p.avisoBg}}; color: {{p.avisoFg}};">{{p.aviso}}</span>
+                  </sc-if>
+                </div>
+              </td>
+              <td style="padding: 10px 16px; border-bottom: {{p.borda}};">
+                <button role="switch" aria-checked="{{p.ativoTxt}}" aria-label="Mostrar {{p.nome}} no cardápio" onClick="{{p.alternar}}" class="slide" style="width: 46px; height: 28px; padding: 2px; border: none; border-radius: 999px; display: flex; align-items: center; background: {{p.trilho}};">
+                  <span aria-hidden="true" class="slide" style="width: 24px; height: 24px; border-radius: 999px; background: #FFFFFF; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transform: translateX({{p.knobX}});"></span>
+                </button>
+              </td>
+              <td style="padding: 10px 16px; border-bottom: {{p.borda}};">
+                <div style="display: flex; justify-content: flex-end; gap: 6px;">
+                  <button class="press" aria-label="Editar {{p.nome}}" style="width: 34px; height: 34px; border: none; border-radius: 999px; display: flex; align-items: center; justify-content: center; background: {{t.fill}}; color: {{t.text}};">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4l10.5-10.5a2.1 2.1 0 00-3-3L5 17v3z"></path></svg>
+                  </button>
+                  <button class="press" aria-label="Excluir {{p.nome}}" style="width: 34px; height: 34px; border: none; border-radius: 999px; display: flex; align-items: center; justify-content: center; background: {{t.fill}}; color: {{t.perigo}};">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </div>
+    <span style="font-size: 13px; color: {{t.sub}};">Produtos fora do cardápio ou sem estoque não aparecem para os alunos.</span>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"enum","options":["Verde","Laranja","Azul"],"default":"Azul"},"dark":{"editor":"boolean","default":false},"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { busca: '', inativos: { 6: true } };
+  }
+  renderVals() {
+    var dark = this.props.dark ?? false;
+    var nomeCor = this.props.accent ?? 'Azul';
+    var cores = { Verde: ['#1F7A35', '#30D158'], Laranja: ['#C93400', '#FF9F0A'], Azul: ['#0066CC', '#0A84FF'] };
+    var par = cores[nomeCor] || cores.Azul;
+    var accent = dark ? par[1] : par[0];
+    var onAccent = dark ? '#000000' : '#FFFFFF';
+    var t = dark
+      ? { bg: '#1C1C1E', side: '#232325', card: '#2C2C2E', fill: '#3A3A3C', text: '#F5F5F7', sub: '#A1A1A6', sep: 'rgba(84,84,88,0.65)', perigo: '#FF6B5E', off: '#48484A' }
+      : { bg: '#F2F2F7', side: '#F5F5F7', card: '#FFFFFF', fill: '#EDEDF0', text: '#1C1C1E', sub: '#6E6E73', sep: 'rgba(60,60,67,0.2)', perigo: '#C4261D', off: '#D1D1D6' };
+    var aviso = dark
+      ? { baixoBg: '#3A2A10', baixoFg: '#FFB340', zeroBg: '#3B1714', zeroFg: '#FF6B5E' }
+      : { baixoBg: '#FFF1DC', baixoFg: '#8A4B00', zeroBg: '#FDE7E6', zeroFg: '#B3261E' };
+    var self = this;
+    var produtos = [
+      { id: 1, nome: 'Coxinha de frango', desc: 'Massa leve, recheio cremoso', cat: 'Salgados', preco: 6.5, estoque: 24 },
+      { id: 2, nome: 'Pão de queijo', desc: 'Porção com 3 unidades', cat: 'Salgados', preco: 5, estoque: 4 },
+      { id: 3, nome: 'Esfiha de carne', desc: 'Assada, massa fina', cat: 'Salgados', preco: 6, estoque: 15 },
+      { id: 4, nome: 'Suco de laranja', desc: 'Natural, 300 ml', cat: 'Bebidas', preco: 4, estoque: 18 },
+      { id: 5, nome: 'Água mineral', desc: 'Sem gás, 500 ml', cat: 'Bebidas', preco: 3, estoque: 0 },
+      { id: 6, nome: 'Brownie', desc: 'Chocolate meio amargo', cat: 'Doces', preco: 5.5, estoque: 10 }
+    ];
+    function brl(v) { return 'R$ ' + v.toFixed(2).replace('.', ','); }
+    var busca = this.state.busca.trim().toLowerCase();
+    var filtrados = produtos.filter(function (p) { return !busca || p.nome.toLowerCase().indexOf(busca) >= 0; });
+    var semEstoque = produtos.filter(function (p) { return p.estoque === 0; }).length;
+    var lista = filtrados.map(function (p, idx) {
+      var ativo = !self.state.inativos[p.id];
+      var zero = p.estoque === 0, baixo = p.estoque > 0 && p.estoque <= 5;
+      return {
+        nome: p.nome, desc: p.desc, cat: p.cat, precoFmt: brl(p.preco), estoque: p.estoque, inicial: p.nome.charAt(0),
+        temAviso: zero || baixo, aviso: zero ? 'Sem estoque' : 'Acabando',
+        avisoBg: zero ? aviso.zeroBg : aviso.baixoBg, avisoFg: zero ? aviso.zeroFg : aviso.baixoFg,
+        ativoTxt: ativo ? 'true' : 'false', trilho: ativo ? (dark ? '#30D158' : '#248A3D') : t.off, knobX: ativo ? '18px' : '0px',
+        opacidade: ativo ? 1 : 0.6,
+        borda: idx < filtrados.length - 1 ? '0.5px solid ' + t.sep : 'none',
+        alternar: function () {
+          var ina = Object.assign({}, self.state.inativos);
+          ina[p.id] = !ina[p.id];
+          self.setState({ inativos: ina });
+        }
+      };
+    });
+    return {
+      t: t, accent: accent, onAccent: onAccent, tint: accent + (dark ? '33' : '1F'), lista: lista,
+      resumo: produtos.length + ' produtos · ' + semEstoque + ' sem estoque',
+      buscar: function (e) { self.setState({ busca: e.target.value }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

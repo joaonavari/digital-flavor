@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Cardápio</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#0066CC}a:hover{color:#004C99}
+.press{transition:transform 160ms cubic-bezier(0.23,1,0.32,1)}
+.press:active{transform:scale(0.96)}
+button{font:inherit;cursor:pointer}
+@media (prefers-reduced-motion: reduce){.slide{transition:none !important}}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: {{t.bg}}; color: {{t.text}}; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, 'Segoe UI', Roboto, sans-serif;">
+
+  <div style="padding: 60px 20px 0 20px; display: flex; flex-direction: column; gap: 4px;">
+    <p style="margin: 0; font-size: 15px; font-weight: 500; color: {{t.sub}};">Olá, Maria</p>
+    <h1 style="margin: 0; font-size: 34px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em;">Cardápio</h1>
+  </div>
+
+  <div style="padding: 16px 16px 4px 16px;">
+    <div role="tablist" aria-label="Categorias" style="position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 3px; border-radius: 999px; background: {{t.fill}};">
+      <div aria-hidden="true" class="slide" style="position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc((100% - 6px) / 4); border-radius: 999px; background: {{thumb}}; box-shadow: 0 2px 8px rgba(0,0,0,0.12), 0 0 1px rgba(0,0,0,0.1); transform: translateX({{catX}}); transition: transform 380ms cubic-bezier(0.32,0.72,0,1);"></div>
+      <sc-for list="{{cats}}" as="c" hint-placeholder-count="4">
+        <button role="tab" aria-selected="{{c.on}}" onClick="{{c.pick}}" style="position: relative; min-height: 38px; border: none; border-radius: 999px; background: transparent; font-size: 14px; font-weight: {{c.peso}}; color: {{t.text}};">{{c.label}}</button>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="padding: 12px 16px 200px 16px; display: flex; flex-direction: column; gap: 10px;">
+    <sc-for list="{{lista}}" as="p" hint-placeholder-count="5">
+      <div style="display: flex; align-items: center; gap: 14px; padding: 12px; border-radius: 20px; background: {{t.card}};">
+        <sc-if value="{{p.temFoto}}" hint-placeholder-val="{{false}}">
+          <div role="img" aria-label="Foto: {{p.nome}}" style="width: 64px; height: 64px; flex-shrink: 0; border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; background: {{t.foto}}; color: {{t.sub}};">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="14" rx="3"></rect><circle cx="9" cy="10" r="1.6"></circle><path d="M20.5 15.5l-5-4.5-8 8"></path></svg>
+            <span style="font-size: 10px; font-weight: 600;">[FOTO]</span>
+          </div>
+        </sc-if>
+        <sc-if value="{{p.semFoto}}" hint-placeholder-val="{{true}}">
+          <div aria-hidden="true" style="width: 64px; height: 64px; flex-shrink: 0; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; background: {{tint}}; color: {{accent}};">{{p.inicial}}</div>
+        </sc-if>
+        <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px;">
+          <span style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em;">{{p.nome}}</span>
+          <span style="font-size: 13px; color: {{t.sub}};">{{p.desc}}</span>
+          <span style="font-size: 15px; font-weight: 600; margin-top: 2px;">{{p.precoFmt}}</span>
+        </div>
+        <sc-if value="{{p.temQtd}}" hint-placeholder-val="{{false}}">
+          <div style="display: flex; align-items: center; gap: 4px; padding: 4px; border-radius: 999px; background: {{t.fill}};">
+            <button class="press" onClick="{{p.menos}}" aria-label="Remover um {{p.nome}}" style="width: 32px; height: 32px; border: none; border-radius: 999px; background: {{t.card}}; color: {{t.text}}; font-size: 18px; font-weight: 600;">−</button>
+            <span style="min-width: 18px; text-align: center; font-size: 15px; font-weight: 600;">{{p.qtd}}</span>
+            <button class="press" onClick="{{p.mais}}" aria-label="Adicionar mais um {{p.nome}}" style="width: 32px; height: 32px; border: none; border-radius: 999px; background: {{accent}}; color: {{onAccent}}; font-size: 18px; font-weight: 600;">+</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{p.semQtd}}" hint-placeholder-val="{{true}}">
+          <button class="press" onClick="{{p.mais}}" aria-label="Adicionar {{p.nome}}" style="width: 44px; height: 44px; border: none; border-radius: 999px; background: {{accent}}; color: {{onAccent}}; font-size: 22px; font-weight: 500; flex-shrink: 0;">+</button>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+
+  <sc-if value="{{temCarrinho}}" hint-placeholder-val="{{true}}">
+    <a href="Carrinho.dc.html" class="press" style="position: absolute; left: 16px; right: 16px; bottom: 100px; min-height: 56px; padding: 0 18px; border-radius: 18px; display: flex; align-items: center; justify-content: space-between; text-decoration: none; background: {{accent}}; color: {{onAccent}}; box-shadow: 0 10px 30px rgba(0,0,0,0.18);">
+      <span style="display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 600;">
+        <span style="min-width: 26px; height: 26px; padding: 0 6px; box-sizing: border-box; border-radius: 999px; display: flex; align-items: center; justify-content: center; font-size: 14px; background: rgba(255,255,255,0.22);">{{totalItens}}</span>
+        Ver carrinho
+      </span>
+      <span style="font-size: 16px; font-weight: 600;">{{totalFmt}}</span>
+    </a>
+  </sc-if>
+
+  <nav aria-label="Navegação principal" style="position: absolute; left: 0; right: 0; bottom: 0; height: 84px; padding-top: 8px; box-sizing: border-box; display: flex; justify-content: space-around; align-items: flex-start; background: {{t.bar}}; backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border-top: 0.5px solid {{t.sep}};">
+    <a href="#" style="min-width: 72px; display: flex; flex-direction: column; align-items: center; gap: 3px; text-decoration: none; font-size: 11px; font-weight: 600; color: {{accent}};">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="2"></rect><rect x="13.5" y="3.5" width="7" height="7" rx="2"></rect><rect x="3.5" y="13.5" width="7" height="7" rx="2"></rect><rect x="13.5" y="13.5" width="7" height="7" rx="2"></rect></svg>
+      Cardápio
+    </a>
+    <a href="Pedido.dc.html" style="min-width: 72px; display: flex; flex-direction: column; align-items: center; gap: 3px; text-decoration: none; font-size: 11px; font-weight: 500; color: {{t.sub}};">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h12v17l-3-2-3 2-3-2-3 2z"></path><path d="M9 8.5h6M9 12.5h6"></path></svg>
+      Pedidos
+    </a>
+    <a href="#" style="min-width: 72px; display: flex; flex-direction: column; align-items: center; gap: 3px; text-decoration: none; font-size: 11px; font-weight: 500; color: {{t.sub}};">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.5" r="4"></circle><path d="M4.5 20.5c1.2-3.6 4-5.5 7.5-5.5s6.3 1.9 7.5 5.5"></path></svg>
+      Perfil
+    </a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accent&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Verde&quot;,&quot;Laranja&quot;,&quot;Azul&quot;],&quot;default&quot;:&quot;Azul&quot;},&quot;dark&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false},&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:844}}">
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { cat: 'Todos', qtd: { 1: 2, 4: 1 } };
+  }
+  renderVals() {
+    var dark = this.props.dark ?? false;
+    var nomeCor = this.props.accent ?? 'Azul';
+    var cores = { Verde: ['#1F7A35', '#30D158'], Laranja: ['#C93400', '#FF9F0A'], Azul: ['#0066CC', '#0A84FF'] };
+    var par = cores[nomeCor] || cores.Azul;
+    var accent = dark ? par[1] : par[0];
+    var t = dark
+      ? { bg: '#000000', card: '#1C1C1E', text: '#F5F5F7', sub: '#A1A1A6', fill: '#2C2C2E', foto: '#2C2C2E', bar: 'rgba(22,22,24,0.72)', sep: 'rgba(84,84,88,0.65)' }
+      : { bg: '#F2F2F7', card: '#FFFFFF', text: '#1C1C1E', sub: '#6E6E73', fill: '#E9E9EE', foto: '#E9E9EE', bar: 'rgba(249,249,251,0.78)', sep: 'rgba(60,60,67,0.2)' };
+    var onAccent = dark ? '#000000' : '#FFFFFF';
+    var self = this;
+    var produtos = [
+      { id: 1, nome: 'Coxinha de frango', desc: 'Massa leve, recheio cremoso', preco: 6.5, cat: 'Salgados', foto: true },
+      { id: 2, nome: 'Pão de queijo', desc: 'Porção com 3 unidades', preco: 5, cat: 'Salgados', foto: true },
+      { id: 3, nome: 'Esfiha de carne', desc: 'Assada, massa fina', preco: 6, cat: 'Salgados' },
+      { id: 4, nome: 'Suco de laranja', desc: 'Natural, 300 ml', preco: 4, cat: 'Bebidas', foto: true },
+      { id: 5, nome: 'Água mineral', desc: 'Sem gás, 500 ml', preco: 3, cat: 'Bebidas' },
+      { id: 6, nome: 'Brownie', desc: 'Chocolate meio amargo', preco: 5.5, cat: 'Doces' }
+    ];
+    function brl(v) { return 'R$ ' + v.toFixed(2).replace('.', ','); }
+    function mudar(id, delta) {
+      var q = Object.assign({}, self.state.qtd);
+      q[id] = Math.max(0, (q[id] || 0) + delta);
+      self.setState({ qtd: q });
+    }
+    var cat = this.state.cat;
+    var nomesCat = ['Todos', 'Salgados', 'Bebidas', 'Doces'];
+    var cats = nomesCat.map(function (c) {
+      var on = c === cat;
+      return { label: c, on: on ? 'true' : 'false', peso: on ? 600 : 500, pick: function () { self.setState({ cat: c }); } };
+    });
+    var catX = (nomesCat.indexOf(cat) * 100) + '%';
+    var totalItens = 0, total = 0;
+    produtos.forEach(function (p) { var q = self.state.qtd[p.id] || 0; totalItens += q; total += q * p.preco; });
+    var lista = produtos.filter(function (p) { return cat === 'Todos' || p.cat === cat; }).map(function (p) {
+      var q = self.state.qtd[p.id] || 0;
+      return {
+        nome: p.nome, desc: p.desc, precoFmt: brl(p.preco), inicial: p.nome.charAt(0), qtd: q,
+        temQtd: q > 0, semQtd: q === 0, temFoto: !!p.foto, semFoto: !p.foto,
+        mais: function () { mudar(p.id, 1); }, menos: function () { mudar(p.id, -1); }
+      };
+    });
+    return {
+      t: t, accent: accent, onAccent: onAccent, thumb: dark ? '#636366' : '#FFFFFF', catX: catX, tint: accent + (dark ? '33' : '1F'),
+      cats: cats, lista: lista, temCarrinho: totalItens > 0, totalItens: totalItens, totalFmt: brl(total)
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+.bloco {
+  display: block;
+  border-radius: 8px;
+  background: var(--skeleton);
+  animation: pulsar 1.6s ease-in-out infinite;
+}
+
+/* Pulso suave só de opacidade (barato, roda fora da thread principal). */
+@keyframes pulsar {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bloco {
+    animation: none;
+  }
+}

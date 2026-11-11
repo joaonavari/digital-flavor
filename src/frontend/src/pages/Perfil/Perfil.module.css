@@ -1,0 +1,132 @@
+.cabecalho {
+  padding: max(env(safe-area-inset-top), 60px) 20px 0;
+}
+
+.titulo {
+  font: var(--text-large-title);
+  letter-spacing: var(--tracking-title);
+}
+
+.corpo {
+  padding: 20px 16px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.cartao {
+  padding: 16px;
+  border-radius: var(--radius-group);
+  background: var(--card);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.avatar {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 700;
+  background: var(--accent-tint);
+  color: var(--accent);
+}
+
+.identidade {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nome {
+  font-size: 20px;
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: var(--tracking-headline);
+  overflow-wrap: anywhere;
+}
+
+.email {
+  font-size: 15px;
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.grupo {
+  margin: 0;
+  padding: 0;
+  border-radius: var(--radius-group);
+  background: var(--card);
+  overflow: hidden;
+}
+
+.linha {
+  min-height: var(--tap);
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 17px;
+}
+
+.linha {
+  position: relative;
+}
+
+.linha + .linha::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 16px;
+  right: 0;
+  height: 0.5px;
+  background: var(--separator);
+}
+
+.linha dt {
+  flex-shrink: 0;
+}
+
+.linha dd {
+  margin: 0;
+  min-width: 0;
+  text-align: right;
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.sair {
+  width: 100%;
+  min-height: var(--tap);
+  padding: 0 16px;
+  border: none;
+  border-radius: var(--radius-group);
+  background: var(--card);
+  text-align: left;
+  font-size: 17px;
+  color: var(--danger);
+  transition:
+    transform var(--duration-press) var(--ease-out),
+    background-color 150ms ease;
+}
+
+.sair:active {
+  transform: scale(0.98);
+  background: var(--fill);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sair {
+    transition: background-color 150ms ease;
+  }
+  .sair:active {
+    transform: none;
+  }
+}
