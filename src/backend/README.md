@@ -8,16 +8,26 @@ Autenticação por JWT no cabeçalho `Authorization: Bearer <token>`. Erros semp
 
 | Método | Rota | Quem pode |
 |--------|------|-----------|
-| POST | `/api/auth/cadastro` | público (cria um Aluno) |
+| POST | `/api/auth/cadastro` | público (cria um Aluno, 201 `{ token, usuario }`: já sai logado) |
 | POST | `/api/auth/login` | público, devolve `{ token, usuario }` |
-| GET | `/api/auth/me` | autenticado |
+| GET | `/api/auth/me` | autenticado (inclui telefone; matrícula e turma para ALUNO) |
 | GET | `/api/produtos` | público (só ativos com estoque, RN04) |
 | GET | `/api/produtos/todos`, `/api/produtos/{id}` | GERENTE, ADMINISTRADOR |
-| POST, PUT | `/api/produtos`, `/api/produtos/{id}` | GERENTE, ADMINISTRADOR |
-| DELETE | `/api/produtos/{id}` | GERENTE, ADMINISTRADOR (apaga se nunca vendido; senão desativa) |
+| POST, PUT | `/api/produtos`, `/api/produtos/{id}` (aceitam `imagemUrl`; o PUT também `quantidadeEstoque`) | GERENTE, ADMINISTRADOR |
+| DELETE | `/api/produtos/{id}` | GERENTE, ADMINISTRADOR (204 se apagou; 200 com o produto se só desativou, por já ter sido vendido) |
+| PATCH | `/api/produtos/{id}/ativo` `{ ativo }` | GERENTE, ADMINISTRADOR (tira ou volta para o cardápio) |
 | PATCH | `/api/produtos/{id}/estoque` `{ quantidade }` | GERENTE, ADMINISTRADOR |
+| POST | `/api/pedidos` `{ itens: [{ produtoId, quantidade }], pagamento: { metodo, numeroCartao?, bandeira?, parcelas? } }` | ALUNO (RF05, RF07, RF08, RF09) |
+| GET | `/api/pedidos/meus` | ALUNO |
+| GET | `/api/pedidos/{id}` | o aluno dono, ou FUNCIONARIO, GERENTE, ADMINISTRADOR |
+| GET | `/api/pedidos/fila` | FUNCIONARIO, GERENTE, ADMINISTRADOR (RECEBIDO, EM_PREPARO e PRONTO, do mais antigo) |
+| PATCH | `/api/pedidos/{id}/status` `{ status }` | FUNCIONARIO, GERENTE, ADMINISTRADOR (só a próxima etapa) |
+| POST | `/api/pedidos/{id}/cancelar` | só o aluno dono, enquanto RECEBIDO (devolve estoque e estorna) |
+| GET | `/api/vendas?inicio=AAAA-MM-DD&fim=AAAA-MM-DD` | GERENTE, ADMINISTRADOR (RF10, sem cancelados) |
 | GET, POST | `/api/usuarios` | ADMINISTRADOR (cria Funcionario, Gerente ou Administrador) |
 | PATCH | `/api/usuarios/{id}/ativo` `{ ativo }` | ADMINISTRADOR |
+
+Os formatos de resposta seguem os tipos do front em `src/frontend/src/types/index.ts`.
 
 Códigos de erro: 400 validação, 401 não autenticado ou credenciais inválidas, 403 sem permissão,
 404 não encontrado, 422 regra de negócio. A permissão é sempre decidida por `Usuario.possuiPermissao(Acao)`.
@@ -37,8 +47,14 @@ src/main/java/br/com/digitalflavor/
 
 src/main/resources/
 ├── application.yml
-└── db/migration/    # Scripts Flyway (V1__schema_inicial.sql = DER)
+└── db/migration/    # Scripts Flyway (V1 = DER, V2 = foto do produto, V3 = dados iniciais)
 ```
+
+## Dados iniciais
+
+A migração `V3__dados_iniciais.sql` cria os mesmos produtos, usuários e pedidos de exemplo do mock do front.
+Senha de todos: `123456`. Logins: `aluno@escola.com`, `funcionario@escola.com`, `gerente@escola.com`
+e `admin@escola.com`. Troque ou desative esses usuários fora do ambiente de desenvolvimento.
 
 ## Decisões
 
