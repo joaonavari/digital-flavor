@@ -1,32 +1,149 @@
+/*
+ * Telas de entrada (login e cadastro).
+ * Celular: uma coluna centralizada. Computador (≥ 900px): painel azul à esquerda + formulário à direita.
+ */
 .tela {
-  max-width: var(--app-max-width);
+  --painel-bg: #0066cc;
+  --painel-texto: #ffffff;
+  --painel-suave: rgba(255, 255, 255, 0.82);
+  --painel-icone-bg: rgba(255, 255, 255, 0.16);
+  --pronto-bg: var(--card);
+  --pronto-titulo: var(--text);
+  --pronto-detalhe: var(--text-secondary);
+  --pronto-icone-fg: #ffffff;
+
   min-height: 100dvh;
-  margin-inline: auto;
-  padding: max(env(safe-area-inset-top), 56px) 16px max(env(safe-area-inset-bottom), 32px);
   display: flex;
-  flex-direction: column;
-  gap: 28px;
 }
 
-.cabecalho {
-  padding: 0 4px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+@media (prefers-color-scheme: dark) {
+  .tela {
+    --painel-bg: #0a2a4d;
+    --painel-suave: rgba(255, 255, 255, 0.74);
+    --painel-icone-bg: rgba(255, 255, 255, 0.1);
+    --pronto-icone-fg: #000000;
+  }
 }
 
-/* Ícone do app: o único toque de marca nas telas de acesso. */
-.marca {
-  width: 56px;
-  height: 56px;
-  margin-bottom: 14px;
-  border-radius: 14px;
+/* ---------- Painel azul (computador) ---------- */
+
+.painel {
+  display: none;
+}
+
+.lado {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+  padding: max(env(safe-area-inset-top), 48px) 16px max(env(safe-area-inset-bottom), 24px);
+}
+
+.coluna {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Login no celular: ocupa a altura da tela para o selo ficar no rodapé. */
+.colunaEntrar {
+  min-height: 100%;
+}
+
+/* ---------- Marca no celular ---------- */
+
+.heroi {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-top: 8px;
+}
+
+.nomeApp {
+  margin-top: 18px;
+  font-size: 32px;
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.slogan {
+  margin-top: 8px;
+  max-width: 28ch;
+  font-size: 17px;
+  line-height: 1.35;
+  color: var(--text-secondary);
+  text-wrap: balance;
+}
+
+.heroi .cardPronto {
+  margin-top: 24px;
+}
+
+.marcaPequena {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* ---------- Card "pedido pronto" (decorativo) ---------- */
+
+.cardPronto {
+  width: 100%;
+  max-width: 340px;
+  padding: 12px 14px;
+  border-radius: var(--radius-group);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  background: var(--pronto-bg);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+.cardIcone {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-pill);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--accent);
-  color: var(--on-accent);
-  box-shadow: 0 6px 18px color-mix(in srgb, var(--accent) 35%, transparent);
+  background: var(--success);
+  color: var(--pronto-icone-fg);
+}
+
+.cardTexto {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.cardTitulo {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--pronto-titulo);
+}
+
+.cardDetalhe {
+  font-size: 13px;
+  line-height: 1.3;
+  color: var(--pronto-detalhe);
+}
+
+/* ---------- Cabeçalho do formulário ---------- */
+
+.cabecalho {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .titulo {
@@ -40,8 +157,228 @@
   color: var(--text-secondary);
 }
 
+/* No login do celular a marca já faz o papel do título: "Entrar" fica só para leitores de tela. */
+@media (max-width: 899px) {
+  .cabecalhoEntrar {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+}
+
 .conteudo {
   display: flex;
   flex-direction: column;
   gap: 24px;
+}
+
+.rodape {
+  margin-top: -8px;
+}
+
+/* ---------- Selo ODS 12 (rodapé do login no celular) ---------- */
+
+.selo {
+  margin-top: auto;
+  align-self: center;
+  min-height: 32px;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  background: var(--success-tint);
+  color: var(--success);
+}
+
+.selo svg {
+  flex-shrink: 0;
+}
+
+.selo > span {
+  text-wrap: balance;
+}
+
+.semQuebra {
+  white-space: nowrap;
+}
+
+/* ---------- Computador ---------- */
+
+@media (min-width: 900px) {
+  .painel {
+    position: sticky;
+    top: 16px;
+    flex: 0 1 min(46%, 640px);
+    min-width: 400px;
+    height: calc(100dvh - 32px);
+    min-height: 560px;
+    margin: 16px 0 16px 16px;
+    padding: 36px 40px 40px;
+    border-radius: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    overflow: hidden;
+    background: var(--painel-bg);
+    color: var(--painel-texto);
+  }
+
+  .painelMarca {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  /* No painel azul, o ícone fica branco com a sacola azul. */
+  .painelMarca > span:first-child {
+    background: #ffffff;
+    color: var(--painel-bg);
+  }
+
+  .painelCorpo {
+    margin-block: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 460px;
+  }
+
+  .painelTitulo {
+    font-size: 48px;
+    line-height: 1.05;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  .painelTexto {
+    font-size: 17px;
+    line-height: 1.45;
+    color: var(--painel-suave);
+  }
+
+  .beneficios {
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .beneficios li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .beneficioIcone {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--painel-icone-bg);
+  }
+
+  .cardPainel {
+    --pronto-bg: #ffffff;
+    --pronto-titulo: #1c1c1e;
+    --pronto-detalhe: #6e6e73;
+    --pronto-icone-fg: #ffffff;
+    max-width: 360px;
+    background: var(--pronto-bg);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  }
+
+  .cardPainel .cardIcone {
+    background: #1f7a35;
+  }
+
+  .lado {
+    align-items: center;
+    padding: 48px 40px;
+  }
+
+  .coluna {
+    max-width: 380px;
+    min-height: 0;
+    gap: 28px;
+  }
+
+  .heroi,
+  .marcaPequena,
+  .selo {
+    display: none;
+  }
+
+  .cabecalhoEntrar {
+    position: static;
+  }
+}
+
+@media (min-width: 900px) and (prefers-color-scheme: dark) {
+  .cardPainel {
+    --pronto-bg: rgba(255, 255, 255, 0.08);
+    --pronto-titulo: #f5f5f7;
+    --pronto-detalhe: rgba(255, 255, 255, 0.7);
+    --pronto-icone-fg: #000000;
+    box-shadow: none;
+    border: 0.5px solid rgba(255, 255, 255, 0.14);
+  }
+  .cardPainel .cardIcone {
+    background: #30d158;
+  }
+}
+
+/* Janela baixa (notebook com zoom): o painel deixa de ser fixo e rola junto. */
+@media (min-width: 900px) and (max-height: 620px) {
+  .painel {
+    position: relative;
+    top: 0;
+    height: auto;
+    min-height: calc(100dvh - 32px);
+  }
+}
+
+/* ---------- Entrada suave (só na primeira carga) ---------- */
+
+.tela[data-animar] .surge {
+  animation: surgir 360ms var(--ease-out) both;
+  animation-delay: var(--atraso, 0ms);
+}
+
+@keyframes surgir {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tela[data-animar] .surge {
+    animation: aparecer 200ms ease both;
+    animation-delay: 0ms;
+  }
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+  }
 }

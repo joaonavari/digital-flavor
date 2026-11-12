@@ -73,3 +73,38 @@ export const IconeSair = (p: Props) => (
     <path d="M10 8l-4 4 4 4M6 12h9" />
   </Icone>
 );
+
+/* Sacola do ícone do app. */
+export const IconeApp = (p: Props) => (
+  <Icone {...p}>
+    <path d="M5 9.5h14l-1.3 9.2a2 2 0 01-2 1.8H8.3a2 2 0 01-2-1.8z" />
+    <path d="M9 9.5V7.5a3 3 0 016 0v2" />
+  </Icone>
+);
+
+export const IconeFolha = (p: Props) => (
+  <Icone {...p}>
+    <path d="M5 19c0-8 5-13 14-14 0 9-5 14-12 14" />
+    <path d="M5 19l7-7" />
+  </Icone>
+);
+
+export const IconeEstoque = (p: Props) => (
+  <Icone {...p}>
+    <path d="M4 8l8-4 8 4v8l-8 4-8-4z" />
+    <path d="M4 8l8 4 8-4M12 12v8" />
+  </Icone>
+);
+
+export const IconeCartao = (p: Props) => (
+  <Icone {...p}>
+    <rect x="3" y="5.5" width="18" height="13" rx="2.5" />
+    <path d="M3 10h18M7 15h3" />
+  </Icone>
+);
+
+export const IconeCheck = (p: Props) => (
+  <Icone {...p}>
+    <path d="M5 12.5l4.5 4.5L19 7.5" />
+  </Icone>
+);

@@ -53,6 +53,26 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* Compacto: 30px por botão (o ::after mantém a área de toque perto de 44px). */
+.compacto {
+  gap: 2px;
+  padding: 3px;
+}
+
+.compacto .botao {
+  width: 30px;
+  height: 30px;
+}
+
+.compacto .botao::after {
+  inset: -7px -4px;
+}
+
+.compacto .quantidade {
+  min-width: 20px;
+  font-size: 14px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .botao {
     transition: opacity 150ms ease;

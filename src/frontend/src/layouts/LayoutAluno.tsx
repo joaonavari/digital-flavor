@@ -1,21 +1,42 @@
 import { useState } from "react";
-import { Outlet } from "react-router";
+import { Outlet, useLocation } from "react-router";
+import { BarraTopo } from "../components/BarraTopo";
 import { TabBar } from "../components/TabBar";
 import type { ContextoAluno } from "./contextoAluno";
 import estilos from "./LayoutAluno.module.css";
 
-/** Layout de celular do aluno: coluna de até 480px e tab bar translúcida. */
+/** Largura do conteúdo no computador: o cardápio usa a tela toda; Meus pedidos abre lista + detalhe. */
+function largura(caminho: string): "cheia" | "pedidos" | "estreita" {
+  if (caminho === "/") return "cheia";
+  if (caminho === "/pedidos") return "pedidos";
+  return "estreita";
+}
+
+/**
+ * Layout do aluno. Celular: coluna de até 480px com tab bar translúcida.
+ * Computador (≥ 900px): barra superior com navegação em pílula. A troca é só por CSS,
+ * então a página não é recriada ao redimensionar a janela.
+ */
 export function LayoutAluno() {
   const [acessorio, setAcessorio] = useState<HTMLDivElement | null>(null);
-  const contexto: ContextoAluno = { acessorio };
+  const [topoCelular, setTopoCelular] = useState<HTMLDivElement | null>(null);
+  const [rolagem, setRolagem] = useState<HTMLElement | null>(null);
+  const { pathname } = useLocation();
+  const contexto: ContextoAluno = { acessorio, topoCelular, rolagem };
 
   return (
     <div className={estilos.app} data-recuo="">
-      <main className={estilos.rolagem}>
+      <div className={estilos.topo}>
+        <BarraTopo />
+      </div>
+      <main ref={setRolagem} className={estilos.rolagem} data-largura={largura(pathname)}>
         <Outlet context={contexto} />
       </main>
+      <div ref={setTopoCelular} className={estilos.topoCelular} />
       <div ref={setAcessorio} className={estilos.acessorio} />
-      <TabBar />
+      <div className={estilos.abas}>
+        <TabBar />
+      </div>
     </div>
   );
 }

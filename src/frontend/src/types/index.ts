@@ -138,7 +138,7 @@ interface BaseNovoUsuario {
 /** Corpo de POST /api/usuarios: os campos extras dependem do tipo. */
 export type DadosNovoUsuario = BaseNovoUsuario &
   (
-    | { tipo: "FUNCIONARIO"; matriculaFuncional: string; turno?: string }
+    | { tipo: "FUNCIONARIO"; matricula: string; turno?: string }
     | { tipo: "GERENTE"; setor?: string }
     | { tipo: "ADMINISTRADOR"; nivelAcesso?: number }
   );

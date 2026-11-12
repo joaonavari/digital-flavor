@@ -69,7 +69,7 @@ interface BotaoIconeProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 
   /** Obrigatório: o botão não tem texto visível. */
   rotulo: string;
   variante?: VarianteIcone;
-  tamanho?: 32 | 34 | 44;
+  tamanho?: 32 | 34 | 36 | 44;
   children: ReactNode;
 }
 

@@ -39,19 +39,25 @@
   }
 }
 
-/* As três etapas ficam lado a lado sempre que cabem (≥ 600px); no celular, uma embaixo da outra. */
+/*
+ * As três etapas ocupam toda a largura disponível: 3 colunas iguais a partir de 900px,
+ * uma embaixo da outra abaixo disso. (Sem container query: em alguns navegadores
+ * o container encolhia até o conteúdo e deixava espaço vazio à direita.)
+ */
 .area {
-  container: fila / inline-size;
+  width: 100%;
+  min-width: 0;
 }
 
 .colunas {
+  width: 100%;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 16px;
   align-items: start;
 }
 
-@container fila (min-width: 600px) {
+@media (min-width: 900px) {
   .colunas {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }

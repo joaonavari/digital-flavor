@@ -41,9 +41,18 @@ const Voltar = () => (
   </Link>
 );
 
-export function AcompanharPedido() {
+interface Props {
+  /** Pedido mostrado dentro de Meus pedidos (lista + detalhe); sem ele, vem da rota /pedidos/:id. */
+  idPedido?: number;
+}
+
+export function AcompanharPedido({ idPedido: idEmbutido }: Props = {}) {
   const { id } = useParams();
-  const idPedido = Number(id);
+  const embutido = idEmbutido !== undefined;
+  const idPedido = embutido ? idEmbutido : Number(id);
+  // Dentro de Meus pedidos o título da página já é "Pedidos": o status vira h2.
+  const Titulo = embutido ? "h2" : "h1";
+  const classeCabecalho = `${estilos.cabecalho} ${embutido ? estilos.cabecalhoEmbutido : estilos.cabecalhoComVoltar}`;
   const buscar = useCallback(() => buscarPedido(idPedido), [idPedido]);
   const { dados: pedido, setDados, erro, carregando, tentandoDeNovo, tentarDeNovo, recarregar } = useRecurso(buscar);
   // 403 (pedido de outro aluno) e 404 aparecem do mesmo jeito: "não encontrado".
@@ -92,8 +101,8 @@ export function AcompanharPedido() {
   if (carregando) {
     return (
       <>
-        <header className={`${estilos.cabecalho} ${estilos.cabecalhoComVoltar}`}>
-          <Voltar />
+        <header className={classeCabecalho}>
+          {!embutido && <Voltar />}
           <Skeleton largura={170} altura={15} />
           <Skeleton largura={200} altura={37} raio={10} />
         </header>
@@ -116,8 +125,8 @@ export function AcompanharPedido() {
   if (!pedido) {
     return (
       <>
-        <header className={`${estilos.cabecalho} ${estilos.cabecalhoComVoltar}`}>
-          <Voltar />
+        <header className={classeCabecalho}>
+          {!embutido && <Voltar />}
         </header>
         <div className={estilos.corpo}>
           <div className={estilos.estado}>
@@ -134,10 +143,10 @@ export function AcompanharPedido() {
 
   return (
     <>
-      <header className={`${estilos.cabecalho} ${estilos.cabecalhoComVoltar}`}>
-        <Voltar />
+      <header className={classeCabecalho}>
+        {!embutido && <Voltar />}
         <p className={estilos.sobretitulo}>Pedido #{pedido.id} · retirar no balcão</p>
-        <h1 className={estilos.titulo}>{NOME_STATUS[pedido.status]}</h1>
+        <Titulo className={estilos.titulo}>{NOME_STATUS[pedido.status]}</Titulo>
         {/* Leitores de tela ouvem quando o status muda. */}
         <span className="sr-only" aria-live="polite">
           Status: {NOME_STATUS[pedido.status]}

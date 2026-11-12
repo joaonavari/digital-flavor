@@ -1,0 +1,24 @@
+.barra {
+  padding: env(safe-area-inset-top) 56px 0;
+  height: calc(env(safe-area-inset-top) + 44px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 0.5px solid var(--separator);
+  opacity: 0;
+}
+
+/* Invisível: não intercepta toques no conteúdo. */
+.barra[data-visivel="false"] {
+  visibility: hidden;
+}
+
+.titulo {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: var(--tracking-headline);
+}

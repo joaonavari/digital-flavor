@@ -10,13 +10,15 @@ interface Props {
   maximo?: number;
   /** "cardapio": + azul (mockup 01); "carrinho": os dois neutros (mockup 02). */
   variante?: "cardapio" | "carrinho";
+  /** Botões de 30px, para caber ao lado do nome sem espremê-lo. */
+  compacto?: boolean;
 }
 
 /** Controle "− qtd +". */
-export function Stepper({ quantidade, nome, aoMais, aoMenos, maximo, variante = "cardapio" }: Props) {
+export function Stepper({ quantidade, nome, aoMais, aoMenos, maximo, variante = "cardapio", compacto = false }: Props) {
   const noLimite = maximo !== undefined && quantidade >= maximo;
   return (
-    <div className={estilos.stepper} role="group" aria-label={`Quantidade de ${nome}`}>
+    <div className={`${estilos.stepper} ${compacto ? estilos.compacto : ""}`} role="group" aria-label={`Quantidade de ${nome}`}>
       <button type="button" className={estilos.botao} onClick={aoMenos} aria-label={`Remover um ${nome}`}>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" aria-hidden="true">
           <path d="M5 12h14" />

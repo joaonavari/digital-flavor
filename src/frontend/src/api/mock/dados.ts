@@ -15,7 +15,6 @@ export interface UsuarioMock {
   matricula?: string;
   turma?: string;
   // Campos extras por tipo (POST /api/usuarios)
-  matriculaFuncional?: string;
   turno?: string;
   setor?: string;
   nivelAcesso?: number;
@@ -112,7 +111,7 @@ export function criarBancoInicial(): BancoMock {
 
   const usuarios: UsuarioMock[] = [
     { id: 1, nome: "Maria Souza", email: "aluno@escola.com", senha: "123456", tipo: "ALUNO", ativo: true, telefone: "44999998888", matricula: "2026001", turma: "3º A" },
-    { id: 2, nome: "Carlos Lima", email: "funcionario@escola.com", senha: "123456", tipo: "FUNCIONARIO", ativo: true, matriculaFuncional: "F001", turno: "Manhã" },
+    { id: 2, nome: "Carlos Lima", email: "funcionario@escola.com", senha: "123456", tipo: "FUNCIONARIO", ativo: true, matricula: "F001", turno: "Manhã" },
     { id: 3, nome: "Beatriz Rocha", email: "gerente@escola.com", senha: "123456", tipo: "GERENTE", ativo: true, setor: "Cantina" },
     { id: 4, nome: "Admin", email: "admin@escola.com", senha: "123456", tipo: "ADMINISTRADOR", ativo: true, nivelAcesso: 10 },
   ];

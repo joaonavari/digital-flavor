@@ -23,7 +23,7 @@ import estilos from "./Usuarios.module.css";
 type TipoEquipe = DadosNovoUsuario["tipo"];
 
 /** Limites dos campos extras por tipo (iguais ao banco). nivelAcesso é INT de 1 a 10. */
-const LIMITES_EXTRAS = { matriculaFuncional: 20, turno: 20, setor: 60 } as const;
+const LIMITES_EXTRAS = { matricula: 20, turno: 20, setor: 60 } as const;
 const NIVEL_MIN = 1;
 const NIVEL_MAX = 10;
 
@@ -112,14 +112,14 @@ function Formulario({
   const formulario = useRef<HTMLFormElement>(null);
   const [tipo, setTipo] = useState<TipoEquipe>("FUNCIONARIO");
   const { valores, campo, validarTudo, sujo } = useFormulario(
-    { nome: "", email: "", senha: "", telefone: "", matriculaFuncional: "", turno: "", setor: "", nivelAcesso: String(NIVEL_MIN) },
+    { nome: "", email: "", senha: "", telefone: "", matricula: "", turno: "", setor: "", nivelAcesso: String(NIVEL_MIN) },
     {
       nome: validarNome,
       email: validarEmail,
       senha: validarSenhaNova,
       telefone: validarTelefone,
       // Só é obrigatória quando o tipo é funcionário.
-      matriculaFuncional: (v) => (tipo === "FUNCIONARIO" && !v.trim() ? "Informe a matrícula funcional." : null),
+      matricula: (v) => (tipo === "FUNCIONARIO" && !v.trim() ? "Informe a matrícula funcional." : null),
       nivelAcesso: (v) => {
         if (tipo !== "ADMINISTRADOR") return null;
         const n = Number(v);
@@ -156,7 +156,7 @@ function Formulario({
     // Envia só os campos extras do tipo escolhido.
     const dados: DadosNovoUsuario =
       tipo === "FUNCIONARIO"
-        ? { ...base, tipo, matriculaFuncional: valores.matriculaFuncional.trim(), turno: opcional(valores.turno) }
+        ? { ...base, tipo, matricula: valores.matricula.trim(), turno: opcional(valores.turno) }
         : tipo === "GERENTE"
           ? { ...base, tipo, setor: opcional(valores.setor) }
           : { ...base, tipo, nivelAcesso: Number(valores.nivelAcesso) }; // número no JSON, não texto
@@ -214,8 +214,8 @@ function Formulario({
             agrupado
             rotulo="Matrícula funcional"
             autoComplete="off"
-            maxLength={LIMITES_EXTRAS.matriculaFuncional}
-            {...campo("matriculaFuncional")}
+            maxLength={LIMITES_EXTRAS.matricula}
+            {...campo("matricula")}
           />
           <TextField
             agrupado

@@ -99,3 +99,6 @@ export function paraDadosProduto(v: ValoresProduto): DadosProduto {
 export function normalizar(texto: string): string {
   return texto.normalize("NFD").replace(/[̀-ͯ]/g, "").toLocaleLowerCase("pt-BR");
 }
+
+/** Poucas unidades: avisa o aluno para não ser surpreendido no checkout. */
+export const POUCAS_UNIDADES = 5;

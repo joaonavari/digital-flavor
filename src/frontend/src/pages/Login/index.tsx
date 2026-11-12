@@ -41,7 +41,18 @@ export function Login() {
   }
 
   return (
-    <LayoutAcesso titulo="Entrar" subtitulo="Peça o lanche antes do intervalo e retire sem fila.">
+    <LayoutAcesso
+      variante="entrar"
+      titulo="Entrar"
+      subtitulo="Use o e-mail cadastrado na cantina."
+      rodape={
+        USA_MOCK && (
+          <p className={estilos.dica}>
+            <strong>Modo de exemplo</strong> · senha 123456 para aluno@escola.com, funcionario@escola.com, gerente@escola.com e admin@escola.com
+          </p>
+        )
+      }
+    >
       <form ref={formulario} className={estilos.formulario} onSubmit={enviar} noValidate>
         <GrupoCampos>
           <TextField
@@ -81,12 +92,6 @@ export function Login() {
         Primeira vez aqui? <Link to="/cadastro">Criar conta</Link>
       </p>
 
-      {USA_MOCK && (
-        <p className={estilos.dica}>
-          <strong>Modo de exemplo</strong> (sem back-end). Senha <strong>123456</strong> para todos:
-          aluno@escola.com, funcionario@escola.com, gerente@escola.com, admin@escola.com.
-        </p>
-      )}
     </LayoutAcesso>
   );
 }

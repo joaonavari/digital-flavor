@@ -151,6 +151,7 @@ const rotas: Array<[Metodo, RegExp, Manipulador]> = [
     const dados = corpo as DadosCadastro;
     if (!dados.nome?.trim() || !dados.email?.trim() || !dados.senha || !dados.matricula?.trim())
       throw erro(400, "Preencha nome, e-mail, senha e matrícula.");
+    if (dados.senha.length < 8) throw erro(400, "A senha precisa de pelo menos 8 caracteres.");
     if (banco.usuarios.some((u) => u.email.toLowerCase() === dados.email.trim().toLowerCase()))
       throw erro(422, "Já existe uma conta com este e-mail.");
     const novo: UsuarioMock = {
@@ -379,7 +380,8 @@ const rotas: Array<[Metodo, RegExp, Manipulador]> = [
     const dados = corpo as DadosNovoUsuario;
     if (!dados.nome?.trim() || !dados.email?.trim() || !dados.senha) throw erro(400, "Preencha nome, e-mail e senha.");
     if (!["FUNCIONARIO", "GERENTE", "ADMINISTRADOR"].includes(dados.tipo)) throw erro(400, "Perfil inválido.");
-    if (dados.tipo === "FUNCIONARIO" && !dados.matriculaFuncional?.trim())
+    if (dados.senha.length < 8) throw erro(400, "A senha precisa de pelo menos 8 caracteres.");
+    if (dados.tipo === "FUNCIONARIO" && !dados.matricula?.trim())
       throw erro(400, "Informe a matrícula funcional do funcionário.");
     if (dados.tipo === "ADMINISTRADOR" && dados.nivelAcesso !== undefined &&
       (!Number.isInteger(dados.nivelAcesso) || dados.nivelAcesso < 1 || dados.nivelAcesso > 10))
@@ -394,7 +396,7 @@ const rotas: Array<[Metodo, RegExp, Manipulador]> = [
       tipo: dados.tipo,
       ativo: true,
       telefone: dados.telefone || undefined,
-      ...(dados.tipo === "FUNCIONARIO" ? { matriculaFuncional: dados.matriculaFuncional.trim(), turno: dados.turno } : {}),
+      ...(dados.tipo === "FUNCIONARIO" ? { matricula: dados.matricula.trim(), turno: dados.turno } : {}),
       ...(dados.tipo === "GERENTE" ? { setor: dados.setor } : {}),
       ...(dados.tipo === "ADMINISTRADOR" ? { nivelAcesso: dados.nivelAcesso ?? 1 } : {}),
     };
