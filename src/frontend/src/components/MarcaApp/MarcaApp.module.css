@@ -1,0 +1,15 @@
+.icone {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+/* Sombra suave azulada, só no ícone grande das telas de entrada. */
+.sombra {
+  box-shadow:
+    0 10px 24px color-mix(in srgb, var(--accent) 28%, transparent),
+    0 2px 6px color-mix(in srgb, var(--accent) 18%, transparent);
+}

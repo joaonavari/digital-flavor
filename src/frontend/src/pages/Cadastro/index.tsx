@@ -67,7 +67,7 @@ export function Cadastro() {
   }
 
   return (
-    <LayoutAcesso titulo="Criar conta" subtitulo="Use os dados da sua matrícula na escola.">
+    <LayoutAcesso variante="cadastro" titulo="Criar conta" subtitulo="Use os dados da sua matrícula na escola.">
       <form ref={formulario} className={estilos.formulario} onSubmit={enviar} noValidate>
         <div className={estilos.secao}>
           <span className="section-label">Seus dados</span>
