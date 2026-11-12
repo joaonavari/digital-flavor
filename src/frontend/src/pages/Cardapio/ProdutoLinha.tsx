@@ -3,11 +3,10 @@ import { BotaoIcone } from "../../components/Button";
 import { ProdutoFoto } from "../../components/ProdutoFoto";
 import { Stepper } from "../../components/Stepper";
 import { formatarPreco } from "../../lib/formatar";
+import { POUCAS_UNIDADES } from "../../lib/produto";
 import type { Produto } from "../../types";
 import estilos from "./Cardapio.module.css";
 
-/** Poucas unidades: avisa o aluno para não ser surpreendido no checkout. */
-const POUCAS_UNIDADES = 5;
 
 interface Props {
   produto: Produto;

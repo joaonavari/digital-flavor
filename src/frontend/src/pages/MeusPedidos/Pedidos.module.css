@@ -248,3 +248,66 @@
     opacity: 0.7;
   }
 }
+
+/* Detalhe embutido em Meus pedidos: sem o "voltar". */
+.cabecalhoEmbutido {
+  padding-top: 0;
+}
+
+.listaPedidos {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  min-width: 0;
+}
+
+/* ---------- Computador (≥ 900px): conteúdo centralizado, com respiro ---------- */
+
+@media (min-width: 900px) {
+  .cabecalho {
+    padding: 0 4px;
+  }
+  .cabecalhoComVoltar {
+    padding-top: 0;
+  }
+  .corpo {
+    padding: 24px 0 0;
+  }
+}
+
+/* ---------- Tela larga (≥ 1100px): lista + detalhe ---------- */
+
+.dividido {
+  display: grid;
+  grid-template-columns: minmax(320px, 400px) minmax(0, 1fr);
+  align-items: start;
+  gap: 28px;
+}
+
+.detalhe {
+  position: sticky;
+  top: calc(var(--barra-topo, 60px) + 28px);
+  min-width: 0;
+  max-height: calc(100dvh - var(--barra-topo, 60px) - 56px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 24px;
+  border-radius: var(--radius-sheet);
+  background: color-mix(in srgb, var(--card) 45%, var(--bg));
+  box-shadow: inset 0 0 0 0.5px var(--separator);
+}
+
+.detalhe .corpo {
+  padding: 20px 0 0;
+}
+
+.linhaSelecionada,
+.linhaSelecionada:active {
+  background: var(--accent-tint);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .linhaSelecionada:hover {
+    background: var(--accent-tint);
+  }
+}

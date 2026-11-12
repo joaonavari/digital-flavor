@@ -9,13 +9,16 @@ import { SeletorCategorias } from "../../components/SeletorCategorias";
 import { Carregando, Skeleton } from "../../components/Skeleton";
 import { useAuth } from "../../contexts/useAuth";
 import { useCarrinho } from "../../contexts/useCarrinho";
+import { useComputador } from "../../hooks/useLargura";
 import { useRecurso } from "../../hooks/useRecurso";
 import { useContextoAluno } from "../../layouts/contextoAluno";
 import { formatarPreco } from "../../lib/formatar";
 import { notificar } from "../../lib/notificar";
 import { plural } from "../../lib/texto";
 import type { Produto } from "../../types";
+import { CarrinhoLateral } from "./CarrinhoLateral";
 import { CarrinhoSheet } from "./CarrinhoSheet";
+import { ProdutoCard } from "./ProdutoCard";
 import { ProdutoLinha } from "./ProdutoLinha";
 import estilos from "./Cardapio.module.css";
 
@@ -30,6 +33,8 @@ export function Cardapio() {
   const carrinho = useCarrinho();
   const { acessorio } = useContextoAluno();
   const reduzirMovimento = useReducedMotion() ?? false;
+  // A partir de 900px: grade de cards + carrinho fixo à direita (sem barra nem folha).
+  const computador = useComputador();
   // Ao chegar o cardápio, o carrinho acompanha preços e estoque.
   const { sincronizar } = carrinho;
   const buscar = useCallback(async () => {
@@ -44,6 +49,13 @@ export function Cardapio() {
 
   const [categoria, setCategoria] = useState(TODOS);
   const [carrinhoAberto, setCarrinhoAberto] = useState(false);
+  // Janela alargada com a folha aberta: a folha fecha (no computador o carrinho já está ao lado).
+  const [eraComputador, setEraComputador] = useState(computador);
+  if (eraComputador !== computador) {
+    setEraComputador(computador);
+    if (computador) setCarrinhoAberto(false);
+  }
+  const barraVisivel = !computador && carrinho.totalItens > 0 && !carrinhoAberto;
   // A cascata roda só na primeira carga; trocar de categoria nunca anima a lista.
   const [animarEntrada, setAnimarEntrada] = useState(true);
 
@@ -73,59 +85,75 @@ export function Cardapio() {
     setCategoria(nova);
   }
 
+  const Item = computador ? ProdutoCard : ProdutoLinha;
+
   return (
     <>
-      <header className={estilos.cabecalho}>
-        {primeiroNome && <p className={estilos.saudacao}>Olá, {primeiroNome}</p>}
-        <h1 className={estilos.titulo}>Cardápio</h1>
-      </header>
-
-      {carregando ? (
-        <Carregando rotulo="Carregando o cardápio…">
-          <div className={estilos.categorias}>
-            <Skeleton altura={44} raio={999} />
-          </div>
-          <div className={estilos.lista}>
-            {[0, 1, 2, 3, 4].map((i) => (
-              <div key={i} className={estilos.esqueleto}>
-                <Skeleton largura={64} altura={64} raio={16} />
-                <div className={estilos.esqueletoTexto}>
-                  <Skeleton largura={`${70 - i * 6}%`} altura={17} />
-                  <Skeleton largura="50%" altura={13} />
-                  <Skeleton largura={56} altura={15} />
-                </div>
+      <div className={estilos.pagina} data-barra={barraVisivel || undefined}>
+        <div className={estilos.principal}>
+          <div className={estilos.topo}>
+            <header className={estilos.cabecalho}>
+              {primeiroNome && <p className={estilos.saudacao}>Olá, {primeiroNome}</p>}
+              <h1 className={estilos.titulo}>Cardápio</h1>
+            </header>
+            {carregando ? (
+              <div className={estilos.categorias} aria-hidden="true">
+                <Skeleton altura={44} raio={999} />
               </div>
-            ))}
+            ) : (
+              produtos?.length && categorias.length > 1 ? (
+                <div className={estilos.categorias}>
+                  <SeletorCategorias categorias={categorias} valor={categoriaAtual} aoMudar={escolherCategoria} />
+                </div>
+              ) : null
+            )}
           </div>
-        </Carregando>
-      ) : erro && !produtos ? (
-        <div className={estilos.estado}>
-          <EstadoErro mensagem={mensagemDeErro(erro)} aoTentarDeNovo={tentarDeNovo} tentando={tentandoDeNovo} />
-        </div>
-      ) : !produtos?.length ? (
-        <div className={estilos.estado}>
-          <EmptyState
-            icone={<IconeCardapio tamanho={26} />}
-            titulo="Nada no cardápio agora"
-            descricao="A cantina ainda não publicou os produtos de hoje. Tente de novo daqui a pouco."
-            acao={{ rotulo: "Atualizar", aoClicar: tentarDeNovo, carregando: tentandoDeNovo }}
-          />
-        </div>
-      ) : (
-        <>
-          {categorias.length > 1 && (
-            <div className={estilos.categorias}>
-              <SeletorCategorias categorias={categorias} valor={categoriaAtual} aoMudar={escolherCategoria} />
+
+          {carregando ? (
+            <Carregando rotulo="Carregando o cardápio…">
+              <div className={computador ? estilos.grade : estilos.lista}>
+                {[0, 1, 2, 3, 4].map((i) =>
+                  computador ? (
+                    <div key={i} className={estilos.card}>
+                      <Skeleton altura={120} raio={14} />
+                      <Skeleton largura={`${70 - i * 6}%`} altura={16} />
+                      <Skeleton largura="50%" altura={13} />
+                      <Skeleton largura={56} altura={16} />
+                    </div>
+                  ) : (
+                    <div key={i} className={estilos.esqueleto}>
+                      <Skeleton largura={64} altura={64} raio={16} />
+                      <div className={estilos.esqueletoTexto}>
+                        <Skeleton largura={`${70 - i * 6}%`} altura={17} />
+                        <Skeleton largura="50%" altura={13} />
+                        <Skeleton largura={56} altura={15} />
+                      </div>
+                    </div>
+                  ),
+                )}
+              </div>
+            </Carregando>
+          ) : erro && !produtos ? (
+            <div className={estilos.estado}>
+              <EstadoErro mensagem={mensagemDeErro(erro)} aoTentarDeNovo={tentarDeNovo} tentando={tentandoDeNovo} />
             </div>
-          )}
-          {visiveis.length === 0 ? (
+          ) : !produtos?.length ? (
+            <div className={estilos.estado}>
+              <EmptyState
+                icone={<IconeCardapio tamanho={26} />}
+                titulo="Nada no cardápio agora"
+                descricao="A cantina ainda não publicou os produtos de hoje. Tente de novo daqui a pouco."
+                acao={{ rotulo: "Atualizar", aoClicar: tentarDeNovo, carregando: tentandoDeNovo }}
+              />
+            </div>
+          ) : visiveis.length === 0 ? (
             <div className={estilos.estado}>
               <EmptyState titulo={`Nada em ${categoriaAtual} agora`} descricao="Veja as outras categorias." />
             </div>
           ) : (
-            <ul className={estilos.lista} aria-label={`Produtos: ${categoriaAtual}`}>
+            <ul className={computador ? estilos.grade : estilos.lista} aria-label={`Produtos: ${categoriaAtual}`}>
               {visiveis.map((produto: Produto, i) => (
-                <ProdutoLinha
+                <Item
                   key={produto.id}
                   produto={produto}
                   quantidade={carrinho.quantidadeDe(produto.id)}
@@ -136,13 +164,15 @@ export function Cardapio() {
               ))}
             </ul>
           )}
-        </>
-      )}
+        </div>
+
+        {computador && <CarrinhoLateral aoEstoqueMudar={() => void recarregar()} />}
+      </div>
 
       {acessorio &&
         createPortal(
           <AnimatePresence>
-            {carrinho.totalItens > 0 && !carrinhoAberto && (
+            {barraVisivel && (
               <motion.button
                 key="barra"
                 type="button"
@@ -170,7 +200,7 @@ export function Cardapio() {
         )}
 
       <CarrinhoSheet
-        aberto={carrinhoAberto}
+        aberto={carrinhoAberto && !computador}
         aoFechar={() => setCarrinhoAberto(false)}
         aoEstoqueMudar={() => void recarregar()}
       />

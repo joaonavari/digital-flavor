@@ -257,3 +257,123 @@
     opacity: 0;
   }
 }
+
+/* ---------- Computador (≥ 900px): grade de cards + carrinho fixo ---------- */
+
+.grade {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  min-width: 0;
+  padding: 12px;
+  border-radius: var(--radius-card);
+  background: var(--card);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cardFoto {
+  height: 120px;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  font-weight: 700;
+  background: var(--accent-tint);
+  color: var(--accent);
+}
+
+.cardFoto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cardTexto {
+  padding: 0 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.cardNome {
+  font-size: 16px;
+  line-height: 1.25;
+  font-weight: 600;
+  letter-spacing: var(--tracking-headline);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+.cardTexto .ultimas {
+  margin-top: 2px;
+}
+
+.cardRodape {
+  margin-top: auto;
+  padding-left: 4px;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.cardPreco {
+  font-size: 16px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+@media (min-width: 900px) {
+  .pagina {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+  }
+
+  .principal {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* Título à esquerda, categorias à direita, na mesma linha. */
+  .topo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .cabecalho {
+    padding: 0;
+  }
+
+  .categorias {
+    flex: 0 1 420px;
+    min-width: 0;
+    padding: 0;
+  }
+
+  .estado {
+    margin: 0;
+  }
+}

@@ -1,0 +1,165 @@
+/* Barra fixa translúcida do aluno no computador (o celular usa a TabBar). */
+.barra {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  height: var(--barra-topo);
+  padding: 0 28px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+  border-bottom: 0.5px solid var(--separator);
+}
+
+.marca,
+.aluno {
+  min-width: 0;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.marca {
+  justify-self: start;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: var(--tracking-headline);
+  white-space: nowrap;
+}
+
+.aluno {
+  justify-self: end;
+  max-width: 100%;
+  padding: 0 4px 0 12px;
+  border-radius: var(--radius-pill);
+  font-size: 14px;
+  color: var(--text-secondary);
+  transition: background-color 150ms ease;
+}
+
+.nome {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.avatar {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  background: var(--accent-tint);
+  color: var(--accent);
+}
+
+/* Navegação em pílula: três colunas iguais, o destaque desliza entre elas. */
+.nav {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--quantidade), minmax(0, 1fr));
+  padding: 3px;
+  border-radius: var(--radius-pill);
+  background: var(--fill);
+}
+
+.destaque {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  width: calc((100% - 6px) / var(--quantidade));
+  border-radius: var(--radius-pill);
+  background: var(--thumb);
+  box-shadow: var(--shadow-thumb);
+  transition: transform var(--duration-segment) var(--ease-drawer);
+  pointer-events: none;
+}
+
+.aba {
+  position: relative;
+  min-width: 112px;
+  min-height: 34px;
+  padding: 0 16px;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--text);
+}
+
+.ativa {
+  font-weight: 600;
+}
+
+.aba {
+  transition: transform var(--duration-press) var(--ease-out);
+}
+
+.aba:active {
+  transform: scale(0.97);
+}
+
+/* Negrito sem empurrar os vizinhos (mesma técnica do SegmentedControl). */
+.rotulo {
+  display: inline-grid;
+}
+
+.rotulo::after {
+  content: attr(data-texto);
+  height: 0;
+  visibility: hidden;
+  overflow: hidden;
+  font-weight: 600;
+}
+
+.rotulo > span,
+.rotulo::after {
+  grid-area: 1 / 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .aba:not(.ativa):hover {
+    color: var(--text-secondary);
+  }
+  .aluno:hover {
+    background: var(--fill);
+    color: var(--text);
+  }
+  .marca:hover {
+    color: var(--text);
+  }
+}
+
+/* Janela entre 900 e ~1000px: o nome do aluno some, fica só o avatar. */
+@media (max-width: 1020px) {
+  .nome {
+    display: none;
+  }
+  .aluno {
+    padding: 0 4px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .destaque,
+  .aba {
+    transition: none;
+  }
+  .aba:active {
+    transform: none;
+  }
+}

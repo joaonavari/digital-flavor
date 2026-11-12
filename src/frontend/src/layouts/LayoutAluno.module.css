@@ -45,3 +45,57 @@
 .acessorio > * {
   pointer-events: auto;
 }
+
+/* ---------- Computador (≥ 900px) ---------- */
+
+.topo {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .app {
+    --barra-topo: 60px;
+    max-width: none;
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+    box-shadow: none;
+  }
+
+  /* A barra fica presa no topo da janela; a página rola no documento. */
+  .topo {
+    display: contents;
+  }
+
+  .abas,
+  .acessorio {
+    display: none;
+  }
+
+  .rolagem {
+    height: auto;
+    overflow: visible;
+    margin-inline: auto;
+    padding: 28px 28px 48px;
+    scrollbar-width: auto;
+  }
+
+  .rolagem::-webkit-scrollbar {
+    display: initial;
+  }
+
+  .rolagem[data-largura="cheia"] {
+    max-width: 1440px;
+  }
+
+  .rolagem[data-largura="estreita"],
+  .rolagem[data-largura="pedidos"] {
+    max-width: calc(720px + 56px);
+  }
+}
+
+@media (min-width: 1100px) {
+  .rolagem[data-largura="pedidos"] {
+    max-width: calc(1120px + 56px);
+  }
+}
