@@ -6,7 +6,7 @@
 export const LIMITES = {
   nome: 120,
   email: 160,
-  senhaMin: 6,
+  senhaMin: 8, // o back exige 8 no cadastro e na criação de usuário (o login não valida tamanho)
   senhaMax: 72,
   matricula: 20,
   turma: 30,
