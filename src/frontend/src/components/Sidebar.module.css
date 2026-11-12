@@ -11,11 +11,19 @@
 }
 
 .marca {
-  padding: 0 10px 18px;
+  padding: 0 8px 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.marcaTexto,
+.pessoaTexto {
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  min-width: 0;
+  gap: 1px;
 }
 
 .nomeApp {
@@ -71,6 +79,42 @@
 .rodape {
   margin-top: auto;
   padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Quem está usando o painel, acima de "Sair". */
+.pessoa {
+  padding: 10px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  background: var(--fill);
+}
+
+.avatar {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  background: var(--accent-tint);
+  color: var(--accent);
+}
+
+.pessoaNome {
+  font-size: 14px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .sair {
@@ -141,6 +185,17 @@
   .rodape {
     margin: 0;
     padding: 0;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  /* Celular: só o avatar, para a barra caber numa linha. */
+  .pessoa {
+    padding: 0;
+    background: none;
+  }
+  .pessoaTexto {
+    display: none;
   }
 
   .sair {

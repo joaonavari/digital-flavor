@@ -10,7 +10,7 @@ export function LayoutCantina() {
 
   return (
     <div className={estilos.painel}>
-      <Sidebar tipo={estado.usuario.tipo} />
+      <Sidebar tipo={estado.usuario.tipo} nome={estado.usuario.nome} />
       <main className={estilos.conteudo}>
         <Outlet />
       </main>
