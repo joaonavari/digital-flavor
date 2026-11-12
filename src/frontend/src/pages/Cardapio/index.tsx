@@ -1,5 +1,5 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { mensagemDeErro } from "../../api/http";
 import { listarCardapio } from "../../api/produtos";
@@ -7,6 +7,7 @@ import { EmptyState, EstadoErro } from "../../components/EmptyState";
 import { IconeCardapio } from "../../components/Icones";
 import { SeletorCategorias } from "../../components/SeletorCategorias";
 import { Carregando, Skeleton } from "../../components/Skeleton";
+import { TituloCompacto } from "../../components/TituloCompacto";
 import { useAuth } from "../../contexts/useAuth";
 import { useCarrinho } from "../../contexts/useCarrinho";
 import { useComputador } from "../../hooks/useLargura";
@@ -35,6 +36,7 @@ export function Cardapio() {
   const reduzirMovimento = useReducedMotion() ?? false;
   // A partir de 900px: grade de cards + carrinho fixo à direita (sem barra nem folha).
   const computador = useComputador();
+  const tituloGrande = useRef<HTMLHeadingElement>(null);
   // Ao chegar o cardápio, o carrinho acompanha preços e estoque.
   const { sincronizar } = carrinho;
   const buscar = useCallback(async () => {
@@ -94,7 +96,9 @@ export function Cardapio() {
           <div className={estilos.topo}>
             <header className={estilos.cabecalho}>
               {primeiroNome && <p className={estilos.saudacao}>Olá, {primeiroNome}</p>}
-              <h1 className={estilos.titulo}>Cardápio</h1>
+              <h1 ref={tituloGrande} className={estilos.titulo}>
+                Cardápio
+              </h1>
             </header>
             {carregando ? (
               <div className={estilos.categorias} aria-hidden="true">
@@ -168,6 +172,8 @@ export function Cardapio() {
 
         {computador && <CarrinhoLateral aoEstoqueMudar={() => void recarregar()} />}
       </div>
+
+      {!computador && <TituloCompacto titulo="Cardápio" alvo={tituloGrande} />}
 
       {acessorio &&
         createPortal(

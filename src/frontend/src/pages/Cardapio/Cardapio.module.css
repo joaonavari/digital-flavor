@@ -23,11 +23,10 @@
   padding: 16px 16px 4px;
 }
 
-/* Espaço extra no fim para a barra "Ver carrinho" não cobrir o último produto. */
 .lista {
   container: lista / inline-size;
   margin: 0;
-  padding: 12px 16px 96px;
+  padding: 12px 16px 16px;
   list-style: none;
   display: flex;
   flex-direction: column;
@@ -60,10 +59,11 @@
 }
 
 /*
- * Lista estreita (celular de 320px): com o stepper aberto, ele desce para uma linha própria
- * abaixo do texto, para o nome do produto não ficar espremido.
+ * Com o stepper aberto, a linha usa o stepper compacto (30px), que ocupa menos que o
+ * de 32px e deixa mais espaço para o nome. Em telas de até 362px ele desce para uma
+ * linha própria: ao lado do nome, nomes comuns ("Pão de queijo") quebrariam em duas linhas.
  */
-@container lista (max-width: 330px) {
+@media (max-width: 362px) {
   .comStepper {
     flex-wrap: wrap;
     row-gap: 10px;
@@ -256,6 +256,14 @@
   from {
     opacity: 0;
   }
+}
+
+/*
+ * Barra "Ver carrinho" visível: espaço no fim da página para o último produto
+ * nunca ficar atrás dela (barra de 56px + 16px de folga até a tab bar + 16px de respiro).
+ */
+.pagina[data-barra] {
+  padding-bottom: 88px;
 }
 
 /* ---------- Computador (≥ 900px): grade de cards + carrinho fixo ---------- */

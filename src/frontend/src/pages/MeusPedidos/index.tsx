@@ -1,4 +1,4 @@
-import { useEffect, useState, type MouseEvent } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { Link, useNavigate } from "react-router";
 import { mensagemDeErro } from "../../api/http";
 import { listarMeusPedidos } from "../../api/pedidos";
@@ -6,7 +6,8 @@ import { EmptyState, EstadoErro } from "../../components/EmptyState";
 import { IconePedidos } from "../../components/Icones";
 import { SeloStatus } from "../../components/SeloStatus";
 import { Carregando, Skeleton } from "../../components/Skeleton";
-import { useTelaLarga } from "../../hooks/useLargura";
+import { TituloCompacto } from "../../components/TituloCompacto";
+import { useComputador, useTelaLarga } from "../../hooks/useLargura";
 import { useRecurso } from "../../hooks/useRecurso";
 import { formatarPreco } from "../../lib/formatar";
 import { emAndamento, formatarDataPedido } from "../../lib/pedidos";
@@ -26,6 +27,8 @@ export function MeusPedidos() {
 
   // A partir de 1100px: lista à esquerda e o pedido escolhido à direita (como no app Mail).
   const telaLarga = useTelaLarga();
+  const computador = useComputador();
+  const tituloGrande = useRef<HTMLHeadingElement>(null);
   const [escolhido, setEscolhido] = useState<number | null>(null);
   const ordenados = [...andamento, ...anteriores];
   const selecionado = ordenados.find((p) => p.id === escolhido)?.id ?? ordenados[0]?.id ?? null;
@@ -45,8 +48,11 @@ export function MeusPedidos() {
   return (
     <>
       <header className={estilos.cabecalho}>
-        <h1 className={estilos.titulo}>Pedidos</h1>
+        <h1 ref={tituloGrande} className={estilos.titulo}>
+          Pedidos
+        </h1>
       </header>
+      {!computador && <TituloCompacto titulo="Pedidos" alvo={tituloGrande} />}
 
       <div className={`${estilos.corpo} ${dividir ? estilos.dividido : ""}`}>
         {carregando ? (

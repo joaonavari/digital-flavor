@@ -1,4 +1,7 @@
+import { useRef } from "react";
+import { TituloCompacto } from "../../components/TituloCompacto";
 import { useAuth } from "../../contexts/useAuth";
+import { useComputador } from "../../hooks/useLargura";
 import { NOME_PERFIL } from "../../lib/perfis";
 import { inicial } from "../../lib/texto";
 import { mascararTelefone } from "../../lib/validacao";
@@ -7,13 +10,18 @@ import estilos from "./Perfil.module.css";
 export function Perfil() {
   const { estado, sair } = useAuth();
   const usuario = estado.usuario;
+  const computador = useComputador();
+  const tituloGrande = useRef<HTMLHeadingElement>(null);
   if (!usuario) return null;
 
   return (
     <>
       <header className={estilos.cabecalho}>
-        <h1 className={estilos.titulo}>Perfil</h1>
+        <h1 ref={tituloGrande} className={estilos.titulo}>
+          Perfil
+        </h1>
       </header>
+      {!computador && <TituloCompacto titulo="Perfil" alvo={tituloGrande} />}
       <div className={estilos.corpo}>
         <div className={estilos.cartao}>
           <div className={estilos.avatar} aria-hidden="true">

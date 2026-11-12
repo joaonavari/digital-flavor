@@ -43,6 +43,7 @@ export function ProdutoLinha({ produto, quantidade, aoAdicionar, aoRemover, atra
         {quantidade > 0 ? (
           <div key="stepper" className={tocouMais ? estilos.troca : undefined}>
             <Stepper
+              compacto
               quantidade={quantidade}
               nome={produto.nome}
               maximo={produto.quantidadeEstoque}

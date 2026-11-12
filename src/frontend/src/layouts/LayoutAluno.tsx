@@ -19,17 +19,20 @@ function largura(caminho: string): "cheia" | "pedidos" | "estreita" {
  */
 export function LayoutAluno() {
   const [acessorio, setAcessorio] = useState<HTMLDivElement | null>(null);
+  const [topoCelular, setTopoCelular] = useState<HTMLDivElement | null>(null);
+  const [rolagem, setRolagem] = useState<HTMLElement | null>(null);
   const { pathname } = useLocation();
-  const contexto: ContextoAluno = { acessorio };
+  const contexto: ContextoAluno = { acessorio, topoCelular, rolagem };
 
   return (
     <div className={estilos.app} data-recuo="">
       <div className={estilos.topo}>
         <BarraTopo />
       </div>
-      <main className={estilos.rolagem} data-largura={largura(pathname)}>
+      <main ref={setRolagem} className={estilos.rolagem} data-largura={largura(pathname)}>
         <Outlet context={contexto} />
       </main>
+      <div ref={setTopoCelular} className={estilos.topoCelular} />
       <div ref={setAcessorio} className={estilos.acessorio} />
       <div className={estilos.abas}>
         <TabBar />
