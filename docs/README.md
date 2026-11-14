@@ -1,9 +1,8 @@
 # Documentação
 
-Esta pasta será utilizada para armazenar os documentos da AEP Digital Flavor.
+Documentos da AEP Digital Flavor.
 
-Arquivos previstos:
-- PDF da 1ª entrega
-- Diagrama de Classes
-- Diagrama Entidade-Relacionamento (DER)
-- Documentação complementar
+- `AEP_Digital_Flavor_1a_Entrega.pdf` – documento da AEP (descoberta, concepção e alinhamento ao ODS 12, justificativa técnica, modelagem, cronograma e controle de versão)
+- `Diagrama_Classe_Digital_Flavor.png` – Diagrama de Classes (composição 1:N, herança e polimorfismo)
+- `DER Digital Flavor.jpeg` – Diagrama Entidade-Relacionamento
+- `design/` – mockups e referências de design
